@@ -1,0 +1,17 @@
+-main Space
+
+-cp libs/milkshake/src
+-cp libs/milkshake/libs
+-cp src
+-cp libs
+
+-lib compiletime
+-lib mconsole
+-lib actuate
+-lib differ
+
+-D pixijs
+
+-js bin/space.js
+
+# -js bin/{settings.name}.js
