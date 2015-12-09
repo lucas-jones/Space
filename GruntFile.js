@@ -1,6 +1,7 @@
 module.exports = function (grunt)
 {
-	
+	var port = 8181;
+
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-haxe');
@@ -18,15 +19,15 @@ module.exports = function (grunt)
 			{
 				options:
 				{
-					port: 8080,
+					port: port,
 					base: 'bin',
 					livereload: true,
 					debug: true,
 					hostname: "0.0.0.0",
 					open:
 					{
-						target: 'http://127.0.0.1:8080'
-					}            
+						target: 'http://127.0.0.1:' + port
+					}
 				}
 			}
 		},
