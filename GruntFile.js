@@ -1,6 +1,6 @@
 module.exports = function (grunt)
 {
-	var port = 8181;
+	var port = 8080;
 
 	grunt.loadNpmTasks('grunt-contrib-copy');
 	grunt.loadNpmTasks('grunt-contrib-watch');
