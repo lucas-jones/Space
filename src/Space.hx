@@ -10,6 +10,7 @@ class Space
 	{
 		var milkshake = Milkshake.boot(new Settings(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
 
-		milkshake.scenes.addScene(new scenes.TestScene());
+		//milkshake.scenes.addScene(new scenes.TestScene());
+		milkshake.scenes.addScene(new scenes.TestShipScene());
 	}
 }
