@@ -10,7 +10,7 @@ import milkshake.core.Sprite;
 
 using Lambda;
 
-class ShipPart extends Sprite implements IShipPart
+class ShipPart extends Sprite
 {
 	public var joints(default, null):Map<String, Joint>;
 

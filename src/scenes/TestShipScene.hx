@@ -1,5 +1,7 @@
 package scenes;
 
+import ship.part.Engine;
+import ship.part.Cockpit;
 import ship.part.Gun;
 import ship.part.joint.Joint;
 import ship.part.ShipPart;
@@ -28,17 +30,14 @@ class TestShipScene extends Scene
 		addNode(new Sprite(Texture.fromImage("assets/images/dino/stars.png")));
 
 		var ship = new ShipBuilder('andrews sick ship')
-			.setCore(new ShipPart('core', 'cockpitGreen_7.png',
-			[
-				new Joint('core_top', new Vector2(0, -37.5)),
-				new Joint('core_bottom', new Vector2(0, 37.5))
-			]))
-			.addPart(new ShipPart('engine', 'engine2.png',
-			[
-				new Joint('engine_top', new Vector2(0, -14)),
-				new Joint('engine_bottom', new Vector2(0, 14))
-			]), 'engine_bottom', 'core_top')
-			.addPart(new Gun(), 'gun_top', 'core_bottom')
+			.setCore(new Cockpit())
+			.addPart(new Engine(), Engine.BOTTOM_JOINT, Cockpit.TOP_JOINT)
+			.addPart(new Gun(), Gun.TOP_JOINT, Cockpit.BOTTOM_JOINT)
+//			.addPart(new ShipPart('wing_right', 'wingGreen_6.png',
+//			[
+//				new Joint('wing_right_left', new Vector2(-21, 0)),
+//				new Joint('wing_right_right', new Vector2(21, 0))
+//			]), 'wing_right_left', Cockpit.RIGHT_JOINT)
 			.build();
 
 		addNode(ship,
@@ -46,7 +45,5 @@ class TestShipScene extends Scene
 			anchor: Vector2.HALF,
 			position: new Vector2(Globals.SCREEN_CENTER.x, Globals.SCREEN_CENTER.y)
 		});
-
-		untyped window.ship = ship;
 	}
 }

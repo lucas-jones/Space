@@ -7,42 +7,49 @@ import ship.part.joint.Joint;
 
 class Gun extends ShipPart
 {
+	public static inline var TOP_JOINT:String = 'gun_top';
+	public static inline var BOTTOM_JOINT:String = 'gun_bottom';
+
 	private var input:Input;
 
-	private var bullet:Bullet;
+	private var bullets:Array<Bullet>;
 
 	public function new()
 	{
 		super('gun', 'gun00.png',
 		[
-			new Joint('gun_top', new Vector2(0, -18)),
-			new Joint('gun_bottom', new Vector2(0, 18))
+			new Joint(TOP_JOINT, new Vector2(0, -18)),
+			new Joint(BOTTOM_JOINT, new Vector2(0, 18))
 		]);
 
 		input = new Input();
+		bullets = [];
 	}
 
 	private function createBullet():Void
 	{
-		addNode(bullet = new Bullet(),
+		var bullet = new Bullet();
+		addNode(bullet,
 		{
-			position: new Vector2(-8, 0)
+			position: new Vector2(-4, 0)
 		});
+
+		bullets.push(bullet);
 
 		Timer.delay(function():Void
 		{
 			removeNode(bullet);
-			bullet = null;
-		}, 500 );
+			bullets.remove(bullet);
+		}, 5000);
 	}
 
 	override public function update(delta:Float):Void
 	{
-		super.update(delta);
-
 		if(input.isDown(32))
 		{
-			if(bullet == null) createBullet();
+			createBullet();
 		}
+
+		super.update(delta);
 	}
 }
