@@ -1,5 +1,6 @@
 package scenes;
 
+import ship.part.Gun;
 import ship.part.joint.Joint;
 import ship.part.ShipPart;
 import ship.ShipBuilder;
@@ -19,7 +20,7 @@ class TestShipScene extends Scene
 
 	public function new()
 	{
-		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS], CameraPresets.DEFAULT, Color.BLUE);
+		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], CameraPresets.DEFAULT, Color.BLUE);
 	}
 
 	override public function create():Void
@@ -37,11 +38,7 @@ class TestShipScene extends Scene
 				new Joint('engine_top', new Vector2(0, -14)),
 				new Joint('engine_bottom', new Vector2(0, 14))
 			]), 'engine_bottom', 'core_top')
-			.addPart(new ShipPart('gun', 'gun00.png',
-			[
-				new Joint('gun_top', new Vector2(0, -18)),
-				new Joint('gun_bottom', new Vector2(0, 18))
-			]), 'gun_top', 'core_bottom')
+			.addPart(new Gun(), 'gun_top', 'core_bottom')
 			.build();
 
 		addNode(ship,
