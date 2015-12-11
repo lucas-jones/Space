@@ -29,14 +29,19 @@ class TestShipScene extends Scene
 		var ship = new ShipBuilder('andrews sick ship')
 			.setCore(new ShipPart('core', 'cockpitGreen_7.png',
 			[
-				new Joint('core_top', new Vector2(24, 0)),
-				new Joint('core_bottom', new Vector2(24, 75))
+				new Joint('core_top', new Vector2(0, -37.5)),
+				new Joint('core_bottom', new Vector2(0, 37.5))
 			]))
 			.addPart(new ShipPart('engine', 'engine2.png',
 			[
-				new Joint('engine_top', new Vector2(21, 0)),
-				new Joint('engine_bottom', new Vector2(21, 28))
+				new Joint('engine_top', new Vector2(0, -14)),
+				new Joint('engine_bottom', new Vector2(0, 14))
 			]), 'engine_bottom', 'core_top')
+			.addPart(new ShipPart('gun', 'gun00.png',
+			[
+				new Joint('gun_top', new Vector2(0, -18)),
+				new Joint('gun_bottom', new Vector2(0, 18))
+			]), 'gun_top', 'core_bottom')
 			.build();
 
 		addNode(ship,

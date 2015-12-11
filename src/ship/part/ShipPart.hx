@@ -21,6 +21,7 @@ class ShipPart extends Sprite implements IShipPart
 	public function new(id:String, frameId:String, joints:Array<Joint>)
 	{
 		super(Texture.fromFrame(frameId), id);
+		this.anchor = new Vector2(0.5, 0.5);
 
 		this.joints = new Map();
 
@@ -28,14 +29,14 @@ class ShipPart extends Sprite implements IShipPart
 		{
 			this.joints[j.id] = j;
 			j.part = this;
-			//This doesnt work :(
-//			if(Globals.DEBUG)
-//			{
-//				addNode(GraphicsHelper.generateRectangle(10, 10, Color.RED, true),
-//				{
-//					position: j.position
-//				});
-//			}
+
+			if(Globals.DEBUG)
+			{
+				addNode(GraphicsHelper.generateRectangle(10, 10, Color.RED, true),
+				{
+					position: j.position
+				});
+			}
 		});
 	}
 
@@ -47,11 +48,14 @@ class ShipPart extends Sprite implements IShipPart
 
 	override public function update(delta:Float):Void
 	{
+		super.update(delta);
+
 		if(connection != null && dirty)
 		{
 			var otherPartPosition = connection.otherJoint.part.position;
 			var otherJointPosition = connection.otherJoint.position;
-			this.position = Vector2.SUM([otherPartPosition, otherJointPosition, connection.partJoint.position]);
+
+			position = Vector2.subtraction(Vector2.addition(otherPartPosition, otherJointPosition), connection.partJoint.position);
 
 			dirty = false;
 		}

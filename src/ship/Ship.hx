@@ -29,18 +29,6 @@ class Ship extends DisplayObject
 		addNode(newPart);
 		parts.push(newPart);
 
-		//This works...
-		if(Globals.DEBUG)
-		{
-			newPart.joints.iter(function(j)
-			{
-				addNode(GraphicsHelper.generateRectangle(10, 10, Color.RED, true),
-				{
-					position: j.position
-				});
-			});
-		}
-
 		if(newPartJoint != null && shipJoint != null) addConnection(newPartJoint, shipJoint);
 	}
 
@@ -62,5 +50,12 @@ class Ship extends DisplayObject
 		}
 
 		return null;
+	}
+
+	override public function update(delta:Float):Void
+	{
+		super.update(delta);
+
+		this.rotation += 0.001 * delta;
 	}
 }
