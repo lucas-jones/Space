@@ -71,4 +71,15 @@ class Ship extends DisplayObject
 		return super.set_position(value);
 		//return 
 	}
+
+	override function get_position():Vector2
+	{
+		if(this.core != null)
+		{
+			return new Vector2(core.body.position.x, core.body.position.y);
+		}
+
+		return super.get_position();
+		//return 
+	}
 }
