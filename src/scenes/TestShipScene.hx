@@ -93,11 +93,5 @@ class TestShipScene extends Scene
 		planetDisplay.position.x = planet.position.x;
 		planetDisplay.position.y = planet.position.y;
 		planetDisplay.rotation = planet.rotation;
-
-		for(camera in this.cameras.activeCameras)
-		{
-			camera.x = -ship.x + Globals.SCREEN_CENTER.x;
-			camera.y = -ship.y + Globals.SCREEN_CENTER.y;
-		}
 	}
 }

@@ -12,8 +12,8 @@ class FollowCamera extends Camera
 	{
 		if(target != null)
 		{
-			x = -target.x + Globals.SCREEN_CENTER.x;
-			y = -target.y + Globals.SCREEN_CENTER.y;
+			targetPosition.x = target.x;
+			targetPosition.y = target.y;
 		}
 
 		super.update(delta);
