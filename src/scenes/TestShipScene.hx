@@ -44,7 +44,7 @@ class TestShipScene extends Scene
 
 	override public function create():Void
 	{
-		this.addNode(new Sprite(Texture.fromImage("assets/images/dino/stars.png")));
+		this.addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
 
 		ship = new ShipBuilder('andrews sick ship', space)
 			.setCore(new Cockpit())
@@ -88,7 +88,7 @@ class TestShipScene extends Scene
 
 		space.step(1 / 24);
 
-		planet.rotation += 0.03;
+		planet.rotation += 0.003;
 
 		planetDisplay.position.x = planet.position.x;
 		planetDisplay.position.y = planet.position.y;

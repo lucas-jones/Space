@@ -1,6 +1,5 @@
 package scenes.camera;
 
-import milkshake.utils.Globals;
 import milkshake.core.Entity;
 import milkshake.game.scene.camera.Camera;
 
