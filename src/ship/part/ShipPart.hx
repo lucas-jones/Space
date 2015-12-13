@@ -75,6 +75,11 @@ class ShipPart extends DisplayObject
 			new Vec2(joint.position.x, joint.position.y));
 		
 		weld.stiff = true;
+
+		weld.breakUnderForce = true;
+		weld.maxForce = 6000;
+
+
 		body.space.constraints.add(weld);
 
 		dirty = true;
