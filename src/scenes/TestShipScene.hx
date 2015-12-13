@@ -34,7 +34,7 @@ class TestShipScene extends Scene
 	{
 		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], CameraPresets.DEFAULT, Color.BLUE);
 
-		space = new Space(new Vec2(2, 5));
+		space = new Space(new Vec2());
 	}
 
 	override public function create():Void
@@ -55,7 +55,7 @@ class TestShipScene extends Scene
 
 		addPlanet();
 
-		addNode(new PhysicsDebug(space));
+		//addNode(new PhysicsDebug(space));
 
 		untyped window.ship = ship;
 	}
