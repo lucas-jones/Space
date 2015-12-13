@@ -39,9 +39,9 @@ class TestShipScene extends Scene
 
 	override public function create():Void
 	{
-		addNode(new Sprite(Texture.fromImage("assets/images/dino/stars.png")));
+		this.addNode(new Sprite(Texture.fromImage("assets/images/dino/stars.png")));
 
-		var ship = new ShipBuilder('andrews sick ship', space)
+		ship = new ShipBuilder('andrews sick ship', space)
 			.setCore(new Cockpit())
 			.addPart(new Engine(), Engine.BOTTOM_JOINT, Cockpit.TOP_JOINT)
 			.addPart(new Gun(), Gun.TOP_JOINT, Cockpit.BOTTOM_JOINT)
@@ -55,7 +55,7 @@ class TestShipScene extends Scene
 
 		addPlanet();
 
-		//addNode(new PhysicsDebug(space));
+		addNode(new PhysicsDebug(space));
 
 		untyped window.ship = ship;
 	}
@@ -86,5 +86,11 @@ class TestShipScene extends Scene
 		planetDisplay.position.x = planet.position.x;
 		planetDisplay.position.y = planet.position.y;
 		planetDisplay.rotation = planet.rotation;
+
+		for(camera in this.cameras.activeCameras)
+		{
+			camera.x = -ship.x + Globals.SCREEN_CENTER.x;
+			camera.y = -ship.y + Globals.SCREEN_CENTER.y;
+		}
 	}
 }
