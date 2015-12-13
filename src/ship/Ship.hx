@@ -1,8 +1,13 @@
 package ship;
 
-import milkshake.utils.Color;
-import milkshake.utils.GraphicsHelper;
-import milkshake.utils.Globals;
+import milkshake.math.Vector2;
+import nape.shape.Circle;
+import nape.geom.Vec2;
+import milkshake.math.Vector2;
+import nape.space.Space;
+import milkshake.components.phsyics.PhysicsEntity;
+import nape.phys.BodyType;
+import nape.phys.Body;
 import ship.part.joint.Joint;
 import ship.part.ShipPart;
 import milkshake.core.DisplayObject;
@@ -12,13 +17,14 @@ using Lambda;
 class Ship extends DisplayObject
 {
 	private var core:ShipPart;
-	private var parts:Array<ShipPart>;
+	private var parts:Array<ShipPart> = [];
+	private var space:Space;
 
-	public function new(id:String, core:ShipPart)
+	public function new(id:String, core:ShipPart, space:Space)
 	{
 		super(id);
 
-		parts = [];
+		this.space = space;
 
 		this.core = core;
 		addPart(core);
@@ -28,6 +34,7 @@ class Ship extends DisplayObject
 	{
 		addNode(newPart);
 		parts.push(newPart);
+		space.bodies.add(newPart.body);
 
 		if(newPartJoint != null && shipJoint != null) addConnection(newPartJoint, shipJoint);
 	}
@@ -52,10 +59,24 @@ class Ship extends DisplayObject
 		return null;
 	}
 
+	override function set_position(value:Vector2):Vector2
+	{
+		var pos = super.set_position(value);
+		parts.iter(function(part:ShipPart) part.syncBodyToDisplayObject());
+		return pos;
+	}
+
+	override function set_rotation(value:Float):Float
+	{
+		var rot = super.set_rotation(value);
+		parts.iter(function(part:ShipPart) part.syncBodyToDisplayObject());
+		return rot;
+	}
+
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
-
-		this.rotation += 0.001 * delta;
+		//TODO Figure out how to update ship position based on physics from ship parts...
+		//this.position = new Vector2(core.body.position.x, core.body.position.y);
 	}
 }

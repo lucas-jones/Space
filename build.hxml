@@ -1,4 +1,4 @@
--main Space
+-main SpaceGame
 
 -cp libs/milkshake/src
 -cp libs/milkshake/libs
@@ -9,6 +9,7 @@
 -lib mconsole
 -lib actuate
 -lib differ
+-lib nape
 
 -D pixijs
 

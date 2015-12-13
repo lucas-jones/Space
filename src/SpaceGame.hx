@@ -4,7 +4,7 @@ import milkshake.Milkshake;
 import milkshake.utils.Globals;
 
 @:expose
-class Space
+class SpaceGame
 {
 	static function main()
 	{
