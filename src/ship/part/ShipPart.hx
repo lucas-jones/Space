@@ -70,50 +70,21 @@ class ShipPart extends DisplayObject
 		joint.pairJoint = shipJoint;
 		shipJoint.pairJoint = joint;
 
-		//TODO Weld parts together
-//		var weld = new WeldJoint(shipJoint.part.body, joint.part.body,
-//			new Vec2(shipJoint.position.x, shipJoint.position.y),
-//			new Vec2(joint.position.x, joint.position.y));
+		var weld = new WeldJoint(shipJoint.part.body, body,
+			new Vec2(shipJoint.position.x, shipJoint.position.y),
+			new Vec2(joint.position.x, joint.position.y));
+		
+		weld.stiff = true;
+		body.space.constraints.add(weld);
 
 		dirty = true;
-	}
-
-	public function syncBodyToDisplayObject()
-	{
-		//BIG HACKS
-		//This is coupled directly to the ship's set rotation and position
-		var globalPosition = new Vector2(displayObject.position.x + displayObject.parent.position.x,
-			displayObject.position.y + displayObject.parent.position.y);
-
-		var globalRotation = displayObject.rotation + displayObject.parent.rotation;
-
-		trace('Setting $id\'s physics body to ${globalPosition.x} ${globalPosition.y}');
-		body.position = new Vec2(globalPosition.x, globalPosition.y);
-		body.rotation = globalRotation;
 	}
 
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
 
-		if(shipConnection != null && dirty)
-		{
-			//If dirty, update parts position relative to joints and move body.
-			var otherPartPosition = shipConnection.otherJoint.part.position;
-			var otherJointPosition = shipConnection.otherJoint.position;
-
-			position = Vector2.subtraction(Vector2.addition(otherPartPosition, otherJointPosition), shipConnection.partJoint.position);
-			//TODO Joint rotation
-			syncBodyToDisplayObject();
-
-			dirty = false;
-		}
-		else
-		{
-			//Set parts position to physic bodies position
-			//BIG HACKS
-			position = new Vector2(body.position.x - displayObject.parent.position.x, body.position.y - displayObject.parent.position.y);
-			rotation = body.rotation - displayObject.parent.rotation;
-		}
+		displayObject.position = displayObject.toLocal(new Point(body.position.x, body.position.y));
+		displayObject.rotation = body.rotation;
 	}
 }

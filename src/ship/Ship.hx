@@ -59,24 +59,16 @@ class Ship extends DisplayObject
 		return null;
 	}
 
+	// Not quite right, 
 	override function set_position(value:Vector2):Vector2
 	{
-		var pos = super.set_position(value);
-		parts.iter(function(part:ShipPart) part.syncBodyToDisplayObject());
-		return pos;
-	}
+		if(this.core != null)
+		{
+			this.core.body.position.x = value.x;
+			this.core.body.position.y = value.y;
+		}
 
-	override function set_rotation(value:Float):Float
-	{
-		var rot = super.set_rotation(value);
-		parts.iter(function(part:ShipPart) part.syncBodyToDisplayObject());
-		return rot;
-	}
-
-	override public function update(delta:Float):Void
-	{
-		super.update(delta);
-		//TODO Figure out how to update ship position based on physics from ship parts...
-		//this.position = new Vector2(core.body.position.x, core.body.position.y);
+		return super.set_position(value);
+		//return 
 	}
 }
