@@ -1,5 +1,7 @@
 package scenes;
 
+import scenes.camera.FollowCamera;
+import scenes.camera.SpaceCameraPresets;
 import nape.phys.BodyType;
 import nape.phys.Body;
 import nape.shape.Circle;
@@ -18,7 +20,6 @@ import milkshake.core.Sprite;
 import pixi.core.textures.Texture;
 import milkshake.assets.SpriteSheets;
 import milkshake.utils.Color;
-import milkshake.game.scene.camera.CameraPresets;
 import milkshake.game.scene.Scene;
 
 class TestShipScene extends Scene
@@ -30,9 +31,13 @@ class TestShipScene extends Scene
 
 	private var space:Space;
 
+	private var followCam:FollowCamera;
+
 	public function new()
 	{
-		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], CameraPresets.DEFAULT, Color.BLUE);
+		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], SpaceCameraPresets.FOLLOW, Color.BLUE);
+
+		followCam = cast cameras.currentCamera;
 
 		space = new Space(new Vec2());
 	}
@@ -52,6 +57,8 @@ class TestShipScene extends Scene
 			anchor: Vector2.HALF,
 			position: new Vector2(Globals.SCREEN_CENTER.x, Globals.SCREEN_CENTER.y)
 		});
+
+		followCam.target = ship;
 
 		addPlanet();
 
@@ -89,8 +96,8 @@ class TestShipScene extends Scene
 
 		for(camera in this.cameras.activeCameras)
 		{
-			camera.targetPosition.x = ship.x;
-			camera.targetPosition.y = ship.y;
+			camera.x = -ship.x + Globals.SCREEN_CENTER.x;
+			camera.y = -ship.y + Globals.SCREEN_CENTER.y;
 		}
 	}
 }

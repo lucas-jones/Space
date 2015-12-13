@@ -59,7 +59,6 @@ class Ship extends DisplayObject
 		return null;
 	}
 
-	// Not quite right, 
 	override function set_position(value:Vector2):Vector2
 	{
 		if(this.core != null)
@@ -69,7 +68,32 @@ class Ship extends DisplayObject
 		}
 
 		return super.set_position(value);
-		//return 
+	}
+
+	override function set_rotation(value:Float):Float
+	{
+		if(this.core != null)
+		{
+			this.core.body.rotation = value;
+		}
+
+		return super.set_rotation(value);
+	}
+
+	override public function update(delta:Float):Void
+	{
+		//Update the x, y and rotation values for the node.
+		if(this.core != null)
+		{
+			this.x = this.core.body.position.x;
+			this.y = this.core.body.position.y;
+			//TODO Fix relative rotation
+			//call super so we dont effect core body
+			//super.set_rotation(this.core.body.rotation);
+
+		}
+
+		super.update(delta);
 	}
 
 	override function get_position():Vector2

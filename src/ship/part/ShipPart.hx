@@ -73,12 +73,11 @@ class ShipPart extends DisplayObject
 		var weld = new WeldJoint(shipJoint.part.body, body,
 			new Vec2(shipJoint.position.x, shipJoint.position.y),
 			new Vec2(joint.position.x, joint.position.y));
-		
+
 		weld.stiff = true;
-
 		weld.breakUnderForce = true;
+		weld.removeOnBreak = true;
 		weld.maxForce = 6000;
-
 
 		body.space.constraints.add(weld);
 
