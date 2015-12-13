@@ -89,8 +89,8 @@ class TestShipScene extends Scene
 
 		for(camera in this.cameras.activeCameras)
 		{
-			camera.x = -ship.x + Globals.SCREEN_CENTER.x;
-			camera.y = -ship.y + Globals.SCREEN_CENTER.y;
+			camera.targetPosition.x = ship.x;
+			camera.targetPosition.y = ship.y;
 		}
 	}
 }
