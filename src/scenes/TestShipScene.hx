@@ -6,6 +6,7 @@ import nape.shape.Circle;
 import milkshake.components.phsyics.PhysicsDebug;
 import nape.geom.Vec2;
 import nape.space.Space;
+import scenes.planet.Planet;
 import ship.part.Engine;
 import ship.part.Cockpit;
 import ship.part.Gun;
@@ -24,6 +25,7 @@ class TestShipScene extends Scene
 {
 	private var ship:Ship;
 
+	private var planetDisplay:Planet;
 	private var planet:Body;
 
 	private var space:Space;
@@ -62,10 +64,15 @@ class TestShipScene extends Scene
 	{
 		//Add test planet
 		planet = new Body(BodyType.KINEMATIC);
-		var planetShape = new Circle(500);
+		var planetShape = new Circle(300);
 		planet.shapes.add(planetShape);
 		space.bodies.add(planet);
-		planet.position = new Vec2(Globals.SCREEN_CENTER.x, Globals.SCREEN_HEIGHT * 1.5);
+		planet.position = new Vec2(Globals.SCREEN_CENTER.x, Globals.SCREEN_HEIGHT);
+
+		var grass = Texture.fromImage("assets/images/textures/grass_side.png");
+		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
+
+		addNode(planetDisplay = new scenes.planet.Planet(grass, dirt));
 	}
 
 	override public function update(delta:Float):Void
@@ -75,5 +82,9 @@ class TestShipScene extends Scene
 		space.step(1 / 24);
 
 		planet.rotation += 0.03;
+
+		planetDisplay.position.x = planet.position.x;
+		planetDisplay.position.y = planet.position.y;
+		planetDisplay.rotation = planet.rotation;
 	}
 }
