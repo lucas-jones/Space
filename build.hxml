@@ -10,6 +10,7 @@
 -lib actuate
 -lib differ
 -lib nape
+-lib pixijs
 
 -D pixijs
 
