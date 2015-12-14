@@ -16,8 +16,8 @@ class Cockpit extends ShipPart
 		[
 			new Joint(TOP_JOINT, new Vector2(0, -37.5)),
 			new Joint(BOTTOM_JOINT, new Vector2(0, 37.5)),
-			new Joint(LEFT_JOINT, new Vector2(-24, 0)),
-			new Joint(RIGHT_JOINT, new Vector2(24, 0))
+			new Joint(LEFT_JOINT, new Vector2(-24, 0), 90),
+			new Joint(RIGHT_JOINT, new Vector2(24, 0), -90)
 		]);
 	}
 }

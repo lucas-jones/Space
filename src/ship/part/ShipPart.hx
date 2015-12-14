@@ -3,8 +3,6 @@ package ship.part;
 import milkshake.math.GUID;
 import pixi.core.math.Point;
 import nape.geom.Vec2;
-import nape.constraint.WeldJoint;
-import js.Error;
 import nape.shape.Polygon;
 import nape.shape.Shape;
 import nape.phys.BodyType;

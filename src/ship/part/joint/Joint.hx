@@ -1,5 +1,7 @@
 package ship.part.joint;
 
+import milkshake.utils.MathHelper;
+import haxe.Timer;
 import js.Error;
 import hsl.haxe.direct.DirectSignaler.DirectSignaler;
 import hsl.haxe.Signaler.Signaler;
@@ -15,17 +17,19 @@ class Joint
 	public var id(default, null):String;
 	public var type(default, null):String;
 	public var position(default, null):Vector2;
+	public var rotation(default, null):Float;
 
 	public var part:ShipPart;
 	public var pairJoint(default, null):Joint;
 	public var weld(default, null):WeldJoint;
 
-	public function new(type:String, position:Vector2, ?pairJoint:Joint)
+	public function new(type:String, position:Vector2, rotation:Float = 0, ?pairJoint:Joint)
 	{
 		this.id = GUID.short();
 
 		this.type = type;
 		this.position = position;
+		this.rotation = rotation;
 		this.pairJoint = pairJoint;
 
 		this.onConnected = new DirectSignaler(this);
@@ -40,9 +44,11 @@ class Joint
 		pairJoint = joint;
 		joint.pairJoint = this;
 
+		//joint.part.rotation = rotation;
+
 		var weld = new WeldJoint(part.body, joint.part.body,
 		new Vec2(position.x, position.y),
-		new Vec2(joint.position.x, joint.position.y));
+		new Vec2(joint.position.x, joint.position.y), MathHelper.toRadians(rotation));
 
 		weld.stiff = true;
 		weld.breakUnderForce = true;
@@ -50,6 +56,8 @@ class Joint
 		weld.maxForce = 20000;
 
 		part.body.space.constraints.add(weld);
+
+		//Timer.delay(function() {part.body.space.constraints.add(weld);}, 500);
 
 		onConnected.dispatch(this);
 	}
