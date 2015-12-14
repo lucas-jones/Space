@@ -9,8 +9,10 @@
 -lib mconsole
 -lib actuate
 -lib differ
+-lib jsfps
 -lib nape
 -lib pixijs
+-lib pixi-particles
 
 -D pixijs
 
