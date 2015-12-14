@@ -38,6 +38,7 @@ class TestShipScene extends Scene
 		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], SpaceCameraPresets.FOLLOW, Color.BLUE);
 
 		followCam = cast cameras.currentCamera;
+		followCam.targetZoom = 0.5;
 
 		space = new Space(new Vec2());
 	}
@@ -59,9 +60,11 @@ class TestShipScene extends Scene
 
 		addNode(ship,
 		{
+			position: new Vector2(2800, 0),
 			anchor: Vector2.HALF,
-			position: new Vector2(Globals.SCREEN_CENTER.x, Globals.SCREEN_CENTER.y)
 		});
+
+
 
 		followCam.target = ship;
 
@@ -72,16 +75,22 @@ class TestShipScene extends Scene
 			addNode(new PhysicsDebug(space));
 			untyped window.ship = ship;
 		}
+		samplePoint = new Body();
+        samplePoint.shapes.add(new Circle(0.001));
+
+
+		untyped window.ship = ship;
 	}
 
 	function addPlanet():Void
 	{
 		//Add test planet
 		planet = new Body(BodyType.KINEMATIC);
-		var planetShape = new Circle(300);
+		var planetShape = new Circle(1200);
 		planet.shapes.add(planetShape);
+		planet.mass = 100;
 		space.bodies.add(planet);
-		planet.position = new Vec2(Globals.SCREEN_CENTER.x, Globals.SCREEN_HEIGHT);
+		// planet.position = new Vec2(Globals.SCREEN_CENTER.x - 200, Globals.SCREEN_HEIGHT + 800);
 
 		var grass = Texture.fromImage("assets/images/textures/grass_side.png");
 		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
@@ -94,11 +103,59 @@ class TestShipScene extends Scene
 		super.update(delta);
 
 		space.step(1 / 24);
-
-		planet.rotation += 0.003;
+		planetaryGravity(planet, 1 / 24);
+		// planet.rotation += 0.003;
 
 		planetDisplay.position.x = planet.position.x;
 		planetDisplay.position.y = planet.position.y;
 		planetDisplay.rotation = planet.rotation;
+	}
+
+
+	private var samplePoint:Body;
+
+	private function planetaryGravity(planet:Body, deltaTime:Float):Void
+	{
+			// Apply a gravitational impulse to all bodies
+			// pulling them to the closest point of a planetary body.
+			//
+			// Because this is a constantly applied impulse, whose value depends
+			// only on the positions of the objects, we can set the 'sleepable'
+			// of applyImpulse to be true and permit these bodies to still go to
+			// sleep.
+			//
+			// Applying a 'sleepable' impulse to a sleeping Body has no effect
+			// so we may as well simply iterate over the non-sleeping bodies.
+			var closestA:Vec2 = Vec2.get();
+			var closestB:Vec2 = Vec2.get();
+
+			for (i in 0 ... space.liveBodies.length)
+			{
+				var body:Body = space.liveBodies.at(i);
+				// Find closest points between bodies.
+				samplePoint.position.set(body.position);
+				var distance:Float = nape.geom.Geom.distanceBody(planet, samplePoint, closestA, closestB);
+
+				// Cut gravity off, well before distance threshold.
+				// if (distance > 100) {
+				// 	continue;
+				// }
+
+				// Gravitational force.
+				var force:Vec2 = closestA.sub(body.position, true);
+
+				// We don't use a true description of gravity, as it doesn't 'play' as nice.
+				force.length = body.mass * 1e6 / (distance * distance);
+
+				// Impulse to be applied = force * deltaTime
+				body.applyImpulse(
+					/*impulse*/ force.muleq(deltaTime),
+					/*position*/ null, // implies body.position
+					/*sleepable*/ true
+				);
+			}
+
+			closestA.dispose();
+			closestB.dispose();
 	}
 }
