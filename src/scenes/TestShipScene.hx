@@ -46,13 +46,15 @@ class TestShipScene extends Scene
 	{
 		this.addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
 
-		var cockpit, engine, gun1, gun2, gun3;
+		var cockpit, engine, gun1, gun2, gun3, gun4, gun5;
 		ship = new ShipBuilder('andrews sick ship', space)
 			.setCore(cockpit = new Cockpit())
 			.addPart(engine = new Engine(), engine.getJointByType(Engine.BOTTOM_JOINT).id, cockpit.getJointByType(Cockpit.TOP_JOINT).id)
 			.addPart(gun1 = new Gun(), gun1.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.BOTTOM_JOINT).id)
 			.addPart(gun2 = new Gun(), gun2.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.LEFT_JOINT).id)
 			.addPart(gun3 = new Gun(), gun3.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.RIGHT_JOINT).id)
+			.addPart(gun4 = new Gun(), gun4.getJointByType(Gun.TOP_JOINT).id, gun3.getJointByType(Gun.BOTTOM_JOINT_LEFT).id)
+			.addPart(gun5 = new Gun(), gun5.getJointByType(Gun.TOP_JOINT).id, gun2.getJointByType(Gun.BOTTOM_JOINT_RIGHT).id)
 			.build();
 
 		addNode(ship,

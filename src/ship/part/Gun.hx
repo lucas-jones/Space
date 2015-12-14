@@ -8,7 +8,8 @@ import ship.part.joint.Joint;
 class Gun extends ShipPart
 {
 	public static inline var TOP_JOINT:String = 'gun_top';
-	public static inline var BOTTOM_JOINT:String = 'gun_bottom';
+	public static inline var BOTTOM_JOINT_LEFT:String = 'gun_bottom_left';
+	public static inline var BOTTOM_JOINT_RIGHT:String = 'gun_bottom_right';
 
 	private var input:Input;
 
@@ -19,7 +20,8 @@ class Gun extends ShipPart
 		super('gun', 'gun00.png',
 		[
 			new Joint(TOP_JOINT, new Vector2(0, -18)),
-			new Joint(BOTTOM_JOINT, new Vector2(0, 18))
+			new Joint(BOTTOM_JOINT_LEFT, new Vector2(-8, 18), 90),
+			new Joint(BOTTOM_JOINT_RIGHT, new Vector2(8, 18), -90)
 		]);
 
 		input = new Input();
