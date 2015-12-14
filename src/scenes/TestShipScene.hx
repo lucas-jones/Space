@@ -46,10 +46,13 @@ class TestShipScene extends Scene
 	{
 		this.addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
 
+		var cockpit, engine, gun1, gun2, gun3;
 		ship = new ShipBuilder('andrews sick ship', space)
-			.setCore(new Cockpit())
-			.addPart(new Engine(), Engine.BOTTOM_JOINT, Cockpit.TOP_JOINT)
-			.addPart(new Gun(), Gun.TOP_JOINT, Cockpit.BOTTOM_JOINT)
+			.setCore(cockpit = new Cockpit())
+			.addPart(engine = new Engine(), engine.getJointByType(Engine.BOTTOM_JOINT).id, cockpit.getJointByType(Cockpit.TOP_JOINT).id)
+			.addPart(gun1 = new Gun(), gun1.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.BOTTOM_JOINT).id)
+			.addPart(gun2 = new Gun(), gun2.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.LEFT_JOINT).id)
+			.addPart(gun3 = new Gun(), gun3.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.RIGHT_JOINT).id)
 			.build();
 
 		addNode(ship,
@@ -62,9 +65,11 @@ class TestShipScene extends Scene
 
 		addPlanet();
 
-		addNode(new PhysicsDebug(space));
-
-		untyped window.ship = ship;
+		if(Globals.DEBUG)
+		{
+			addNode(new PhysicsDebug(space));
+			untyped window.ship = ship;
+		}
 	}
 
 	function addPlanet():Void

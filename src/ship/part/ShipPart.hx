@@ -1,5 +1,6 @@
 package ship.part;
 
+import milkshake.math.GUID;
 import pixi.core.math.Point;
 import nape.geom.Vec2;
 import nape.constraint.WeldJoint;
@@ -21,22 +22,20 @@ using Lambda;
 
 class ShipPart extends DisplayObject
 {
-	public var joints(default, null):Map<String, Joint>;
+	public var type(default, null):String;
+
+	public var joints:Array<Joint> = [];
 	public var body(default, null):Body;
-	public var shipConnection:JointConnection;
 
-	private var dirty:Bool = false;
-
-	public function new(id:String, frameId:String, joints:Array<Joint>, ?shape:Shape)
+	public function new(type:String, frameId:String, joints:Array<Joint>, ?shape:Shape)
 	{
-		super(id);
+		super(GUID.short());
+
+		this.type = type;
 
 		//Add displayobject
 		var texture = Texture.fromFrame(frameId);
-		addNode(new Sprite(texture),
-		{
-			anchor: new Vector2(0.5, 0.5)
-		});
+		addNode(new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
 
 		//setup physics
 		shape = shape == null ? new Polygon(Polygon.box(texture.width, texture.height)) : shape;
@@ -44,44 +43,25 @@ class ShipPart extends DisplayObject
 		body.shapes.add(shape);
 
 		//setup joints
-		this.joints = new Map();
 		joints.iter(addJoint);
 	}
 
 	public function addJoint(joint:Joint):Void
 	{
-		this.joints[joint.id] = joint;
+		joints.push(joint);
 		joint.part = this;
 
 		if(Globals.DEBUG)
 		{
-			addNode(GraphicsHelper.generateRectangle(10, 10, Color.RED, true),
-			{
-				position: joint.position
-			});
+			addNode(GraphicsHelper.generateRectangle(10, 10, Color.RED, true), { position: joint.position });
 		}
 	}
 
-	public function connectTo(joint:Joint, shipJoint:Joint):Void
+	public function getJointByType(type:String):Joint
 	{
-		if(shipJoint.isConnected()) throw new Error('Tried to connect ${joint.id} to ${shipJoint.id} which is already connected');
-
-		shipConnection = { partJoint: joint, otherJoint: shipJoint };
-		joint.pairJoint = shipJoint;
-		shipJoint.pairJoint = joint;
-
-		var weld = new WeldJoint(shipJoint.part.body, body,
-			new Vec2(shipJoint.position.x, shipJoint.position.y),
-			new Vec2(joint.position.x, joint.position.y));
-
-		weld.stiff = true;
-		weld.breakUnderForce = true;
-		weld.removeOnBreak = true;
-		weld.maxForce = 20000;
-
-		body.space.constraints.add(weld);
-
-		dirty = true;
+		return joints.find(function(j:Joint) {
+			return j.type == type;
+		});
 	}
 
 	override public function update(delta:Float):Void

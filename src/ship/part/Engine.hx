@@ -1,12 +1,9 @@
 package ship.part;
 
-import milkshake.core.Sprite;
 import nape.geom.Vec2;
 import milkshake.components.input.Input;
-import haxe.Timer;
 import milkshake.math.Vector2;
 import ship.part.joint.Joint;
-import pixi.core.textures.Texture;
 
 class Engine extends ShipPart
 {
@@ -17,8 +14,6 @@ class Engine extends ShipPart
 
 	private var input:Input;
 
-	var beam:Sprite;
-
 	public function new()
 	{
 		super('engine', 'engine2.png',
@@ -27,23 +22,14 @@ class Engine extends ShipPart
 			new Joint(BOTTOM_JOINT, new Vector2(0, 14))
 		]);
 
-		addNode(beam = new Sprite(Texture.fromFrame("laserBlue15.png")),
-		{
-			position: new Vector2(-4, -80)
-		});
-
 		input = new Input();
 	}
 
 	override public function update(delta:Float):Void
 	{
-		beam.visible = false;
-
 		if(input.isDown(Codes.W))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * speed)));
-
-			beam.visible = true;
 		}
 
 		if(input.isDown(Codes.S))

@@ -67,10 +67,10 @@ class ShipBuilder
 
 		for (k in jointConnections.keys())
 		{
-			var shipJoint = ship.getJointById(k);
-			var newPartJoint = ship.getJointById(jointConnections[k]);
+			var shipJoint:Joint = ship.getJointById(k);
+			var newPartJoint:Joint = ship.getJointById(jointConnections[k]);
 
-			ship.addConnection(shipJoint, newPartJoint);
+			shipJoint.connectTo(newPartJoint);
 		}
 
 		return ship;

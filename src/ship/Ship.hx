@@ -1,12 +1,9 @@
 package ship;
 
+import milkshake.math.GUID;
 import milkshake.math.Vector2;
-import nape.shape.Circle;
 import nape.geom.Vec2;
-import milkshake.math.Vector2;
 import nape.space.Space;
-import milkshake.components.phsyics.PhysicsEntity;
-import nape.phys.BodyType;
 import nape.phys.Body;
 import ship.part.joint.Joint;
 import ship.part.ShipPart;
@@ -16,17 +13,19 @@ using Lambda;
 
 class Ship extends DisplayObject
 {
+	private var name:String;
 	private var core:ShipPart;
 	private var parts:Array<ShipPart> = [];
 	private var space:Space;
 
-	public function new(id:String, core:ShipPart, space:Space)
+	public function new(name:String, core:ShipPart, space:Space)
 	{
-		super(id);
+		super(GUID.short());
 
+		this.name = name;
 		this.space = space;
-
 		this.core = core;
+
 		addPart(core);
 	}
 
@@ -36,13 +35,7 @@ class Ship extends DisplayObject
 		parts.push(newPart);
 		space.bodies.add(newPart.body);
 
-		if(newPartJoint != null && shipJoint != null) addConnection(newPartJoint, shipJoint);
-	}
-
-	public function addConnection(shipJoint:Joint, newPartJoint:Joint):Void
-	{
-		trace('Connecting ${newPartJoint.part.id}:${newPartJoint.id} to ${shipJoint.part.id}:${shipJoint.id}');
-		newPartJoint.part.connectTo(newPartJoint, shipJoint);
+		if(newPartJoint != null && shipJoint != null) shipJoint.connectTo(newPartJoint);
 	}
 
 	public function getJointById(id:String):Joint
@@ -104,6 +97,5 @@ class Ship extends DisplayObject
 		}
 
 		return super.get_position();
-		//return 
 	}
 }
