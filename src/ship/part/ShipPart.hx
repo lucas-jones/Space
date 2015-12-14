@@ -77,7 +77,7 @@ class ShipPart extends DisplayObject
 		weld.stiff = true;
 		weld.breakUnderForce = true;
 		weld.removeOnBreak = true;
-		weld.maxForce = 6000;
+		weld.maxForce = 20000;
 
 		body.space.constraints.add(weld);
 
