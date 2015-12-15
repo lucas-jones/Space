@@ -1,6 +1,8 @@
 package ship.part;
 
-import milkshake.core.Sprite;
+import scenes.particle.ParticlePresets;
+import milkshake.utils.MathHelper;
+import milkshake.core.ParticleEmitter;
 import nape.geom.Vec2;
 import milkshake.components.input.Input;
 import milkshake.math.Vector2;
@@ -16,7 +18,7 @@ class Engine extends ShipPart
 
 	private var input:Input;
 
-	var beam:Sprite;
+	private var emitter:ParticleEmitter;
 
 	public function new()
 	{
@@ -26,23 +28,25 @@ class Engine extends ShipPart
 			new Joint(BOTTOM_JOINT, new Vector2(0, 14))
 		]);
 
-		addNode(beam = new Sprite(Texture.fromFrame("laserBlue15.png")),
+		input = new Input();
+
+		addNode(emitter = ParticlePresets.FIRE,
 		{
-			position: new Vector2(-4, -80)
+			position: new Vector2(),
+			rotation: MathHelper.toRadians(270)
 		});
 
-		input = new Input();
+		displayObject.swapChildren(sprite.displayObject, emitter.displayObject);
 	}
 
 	override public function update(delta:Float):Void
 	{
-		beam.visible = false;
+		emitter.visible = false;
 
 		if(input.isDown(Codes.W))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * speed)));
-
-			beam.visible = true;
+			emitter.visible = true;
 		}
 
 		if(input.isDown(Codes.S))
@@ -59,6 +63,8 @@ class Engine extends ShipPart
 		{
 			body.applyAngularImpulse(50 * speed);
 		}
+
+		emitter.update(delta);
 
 		super.update(delta);
 	}

@@ -24,6 +24,7 @@ class ShipPart extends DisplayObject
 
 	public var joints:Array<Joint> = [];
 	public var body(default, null):Body;
+	public var sprite(default, null):Sprite;
 
 	public function new(type:String, frameId:String, joints:Array<Joint>, ?shape:Shape)
 	{
@@ -33,7 +34,7 @@ class ShipPart extends DisplayObject
 
 		//Add displayobject
 		var texture = Texture.fromFrame(frameId);
-		addNode(new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
+		addNode(sprite = new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
 
 		//setup physics
 		shape = shape == null ? new Polygon(Polygon.box(texture.width, texture.height)) : shape;
