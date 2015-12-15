@@ -75,8 +75,6 @@ class TestShipScene extends Scene
 			addNode(new PhysicsDebug(space));
 			untyped window.ship = ship;
 		}
-		samplePoint = new Body();
-        samplePoint.shapes.add(new Circle(0.001));
 
 		untyped window.ship = ship;
 
@@ -102,8 +100,6 @@ class TestShipScene extends Scene
 
 		orbit = new milkshake.core.Graphics();
 		addNode(orbit);
-
->>>>>>> DIRTY CODE
 	}
 
 	var orbit:milkshake.core.Graphics;
@@ -130,14 +126,8 @@ class TestShipScene extends Scene
 	var apple:Bool = false;
 	override public function update(delta:Float):Void
 	{
-		
-
-		
-		
-
 		var distance = Vector2.distance(Vector2.ZERO, ship.position);
 
-		
 		var inOrbit:Bool = false;
 		if(distance > 1500 && distance < 2500)
 		{
@@ -159,15 +149,13 @@ class TestShipScene extends Scene
 			}
 			else
 			{
-				if(Engine.engineON == false)
-				{
+				//if(input)
+				//{
 					var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
 					ship.core.body.velocity.x = vector.x;
 					ship.core.body.velocity.y = vector.y;
-				}
+				//}
 			}
-
-
 		}
 
 		// planetDisplay.position.x = planet.position.x;

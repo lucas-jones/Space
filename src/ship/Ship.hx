@@ -14,7 +14,7 @@ using Lambda;
 class Ship extends DisplayObject
 {
 	private var name:String;
-	private var core:ShipPart;
+	public var core:ShipPart;
 	private var parts:Array<ShipPart> = [];
 	private var space:Space;
 
