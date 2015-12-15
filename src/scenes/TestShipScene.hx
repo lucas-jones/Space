@@ -126,6 +126,8 @@ class TestShipScene extends Scene
 	var apple:Bool = false;
 	override public function update(delta:Float):Void
 	{
+		super.update(delta);
+
 		var distance = Vector2.distance(Vector2.ZERO, ship.position);
 
 		var inOrbit:Bool = false;
@@ -139,30 +141,17 @@ class TestShipScene extends Scene
 			// trace(targetAngle);
 
 			var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
-			// ship.core.body.space = null;
-			if(apple == false)
-			{
-				// ship.core.body.position.x = targetPosition.x;
-				// ship.core.body.position.y = targetPosition.y;
-
-				apple = true;
-			}
-			else
-			{
-				//if(input)
-				//{
-					var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
-					ship.core.body.velocity.x = vector.x;
-					ship.core.body.velocity.y = vector.y;
-				//}
-			}
+			
+			var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
+			ship.core.body.velocity.x = vector.x;
+			ship.core.body.velocity.y = vector.y;
 		}
 
 		// planetDisplay.position.x = planet.position.x;
 		// planetDisplay.position.y = planet.position.y;
 		// planetDisplay.rotation = planet.rotation;
 
-		super.update(delta);
+		
 
 		space.step(1 / 24);
 
