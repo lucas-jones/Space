@@ -1,5 +1,6 @@
 package scenes;
 
+import haxe.Json;
 import scenes.camera.FollowCamera;
 import scenes.camera.SpaceCameraPresets;
 import nape.phys.BodyType;
@@ -12,7 +13,7 @@ import scenes.planet.Planet;
 import ship.part.Engine;
 import ship.part.Cockpit;
 import ship.part.Gun;
-import ship.ShipBuilder;
+import ship.builder.ShipBuilder;
 import ship.Ship;
 import milkshake.math.Vector2;
 import milkshake.utils.Globals;
@@ -46,16 +47,8 @@ class TestShipScene extends Scene
 	{
 		this.addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
 
-		var cockpit, engine, gun1, gun2, gun3, gun4, gun5;
-		ship = new ShipBuilder('andrews sick ship', space)
-			.setCore(cockpit = new Cockpit())
-			.addPart(engine = new Engine(), engine.getJointByType(Engine.BOTTOM_JOINT).id, cockpit.getJointByType(Cockpit.TOP_JOINT).id)
-			.addPart(gun1 = new Gun(), gun1.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.BOTTOM_JOINT).id)
-			.addPart(gun2 = new Gun(), gun2.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.LEFT_JOINT).id)
-			.addPart(gun3 = new Gun(), gun3.getJointByType(Gun.TOP_JOINT).id, cockpit.getJointByType(Cockpit.RIGHT_JOINT).id)
-			.addPart(gun4 = new Gun(), gun4.getJointByType(Gun.TOP_JOINT).id, gun3.getJointByType(Gun.BOTTOM_JOINT_LEFT).id)
-			.addPart(gun5 = new Gun(), gun5.getJointByType(Gun.TOP_JOINT).id, gun2.getJointByType(Gun.BOTTOM_JOINT_RIGHT).id)
-			.build();
+		//ship = createShip();
+		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
 		addNode(ship,
 		{
@@ -87,6 +80,25 @@ class TestShipScene extends Scene
 		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
 
 		addNode(planetDisplay = new scenes.planet.Planet(grass, dirt));
+	}
+
+	function createShip():Ship
+	{
+		var cockpit, engine, gun1, gun2, gun3, gun4, gun5;
+		var ship = new ShipBuilder('andrews sick ship', space)
+			.setCore(cockpit = new Cockpit())
+			.addPart(engine = new Engine(), engine.getJointByType(Engine.BOTTOM_JOINT), cockpit.getJointByType(Cockpit.TOP_JOINT))
+			.addPart(gun1 = new Gun(), gun1.getJointByType(Gun.TOP_JOINT), cockpit.getJointByType(Cockpit.BOTTOM_JOINT))
+			.addPart(gun2 = new Gun(), gun2.getJointByType(Gun.TOP_JOINT), cockpit.getJointByType(Cockpit.LEFT_JOINT))
+			.addPart(gun3 = new Gun(), gun3.getJointByType(Gun.TOP_JOINT), cockpit.getJointByType(Cockpit.RIGHT_JOINT))
+			.addPart(gun4 = new Gun(), gun4.getJointByType(Gun.TOP_JOINT), gun3.getJointByType(Gun.BOTTOM_JOINT_LEFT))
+			.addPart(gun5 = new Gun(), gun5.getJointByType(Gun.TOP_JOINT), gun2.getJointByType(Gun.BOTTOM_JOINT_RIGHT))
+			.build();
+
+		var descriptor = ShipBuilder.toDescriptor(ship);
+		trace(Json.stringify(descriptor));
+
+		return ship;
 	}
 
 	override public function update(delta:Float):Void

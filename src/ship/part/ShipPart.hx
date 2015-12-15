@@ -21,33 +21,24 @@ using Lambda;
 class ShipPart extends DisplayObject
 {
 	public var type(default, null):String;
-
-	public var joints:Array<Joint> = [];
+	public var joints(default, null):Map<String, Joint>;
 	public var body(default, null):Body;
-	public var sprite(default, null):Sprite;
 
-	public function new(type:String, frameId:String, joints:Array<Joint>, ?shape:Shape)
+	private var sprite:Sprite;
+
+	public function new(type:String, ?id:String, ?joints:Array<Joint>)
 	{
-		super(GUID.short());
+		super(id != null ? id : GUID.short());
 
 		this.type = type;
-
-		//Add displayobject
-		var texture = Texture.fromFrame(frameId);
-		addNode(sprite = new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
-
-		//setup physics
-		shape = shape == null ? new Polygon(Polygon.box(texture.width, texture.height)) : shape;
-		body = new Body(BodyType.DYNAMIC);
-		body.shapes.add(shape);
-
-		//setup joints
-		joints.iter(addJoint);
+		this.body = new Body(BodyType.DYNAMIC);
+		this.joints = new Map();
+		if(joints != null) joints.iter(addJoint);
 	}
 
 	public function addJoint(joint:Joint):Void
 	{
-		joints.push(joint);
+		joints[joint.type] = joint;
 		joint.part = this;
 
 		if(Globals.DEBUG)
@@ -58,9 +49,17 @@ class ShipPart extends DisplayObject
 
 	public function getJointByType(type:String):Joint
 	{
-		return joints.find(function(j:Joint) {
-			return j.type == type;
-		});
+		return joints[type];
+	}
+
+	public function addShape(shape:Shape):Void
+	{
+		body.shapes.add(shape);
+	}
+
+	public function addShapeFromTexture(texture:Texture):Void
+	{
+		addShape(new Polygon(Polygon.box(texture.width, texture.height)));
 	}
 
 	override public function update(delta:Float):Void

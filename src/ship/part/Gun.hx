@@ -1,5 +1,8 @@
 package ship.part;
 
+import milkshake.math.GUID;
+import milkshake.core.Sprite;
+import pixi.core.textures.Texture;
 import haxe.Timer;
 import milkshake.components.input.Input;
 import milkshake.math.Vector2;
@@ -15,14 +18,18 @@ class Gun extends ShipPart
 
 	private var bullets:Array<Bullet>;
 
-	public function new()
+	public function new(?id:String)
 	{
-		super('gun', 'gun00.png',
+		super('gun', id != null ? id : GUID.short(),
 		[
 			new Joint(TOP_JOINT, new Vector2(0, -18)),
 			new Joint(BOTTOM_JOINT_LEFT, new Vector2(-8, 18), 90),
 			new Joint(BOTTOM_JOINT_RIGHT, new Vector2(8, 18), -90)
 		]);
+
+		var texture = Texture.fromFrame('gun00.png');
+		addNode(sprite = new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
+		addShapeFromTexture(texture);
 
 		input = new Input();
 		bullets = [];

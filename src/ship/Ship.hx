@@ -1,5 +1,6 @@
 package ship;
 
+import ship.builder.ShipBuilder.ShipDescriptor;
 import milkshake.math.GUID;
 import milkshake.math.Vector2;
 import nape.geom.Vec2;
@@ -13,9 +14,10 @@ using Lambda;
 
 class Ship extends DisplayObject
 {
-	private var name:String;
-	private var core:ShipPart;
-	private var parts:Array<ShipPart> = [];
+	public var name(default, null):String;
+	public var core(default, null):ShipPart;
+	public var parts(default, null):Map<String, ShipPart>;
+
 	private var space:Space;
 
 	public function new(name:String, core:ShipPart, space:Space)
@@ -26,30 +28,22 @@ class Ship extends DisplayObject
 		this.space = space;
 		this.core = core;
 
+		parts = new Map();
 		addPart(core);
 	}
 
 	public function addPart(newPart:ShipPart, ?newPartJoint:Joint, ?shipJoint:Joint):Void
 	{
 		addNode(newPart);
-		parts.push(newPart);
+		parts[newPart.id] = newPart;
 		space.bodies.add(newPart.body);
 
 		if(newPartJoint != null && shipJoint != null) shipJoint.connectTo(newPartJoint);
 	}
 
-	public function getJointById(id:String):Joint
+	public function getPartById(id:String):ShipPart
 	{
-		for (p in parts)
-		{
-			var joint = p.joints.find(function(j:Joint) {
-				return j.id == id;
-			});
-
-			if (joint != null) return joint;
-		}
-
-		return null;
+		return parts[id];
 	}
 
 	override function set_position(value:Vector2):Vector2

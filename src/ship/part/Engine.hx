@@ -1,5 +1,8 @@
 package ship.part;
 
+import milkshake.math.GUID;
+import milkshake.components.input.Key;
+import milkshake.core.Sprite;
 import scenes.particle.ParticlePresets;
 import milkshake.utils.MathHelper;
 import milkshake.core.ParticleEmitter;
@@ -20,9 +23,9 @@ class Engine extends ShipPart
 
 	private var emitter:ParticleEmitter;
 
-	public function new()
+	public function new(?id:String)
 	{
-		super('engine', 'engine2.png',
+		super('engine', id != null ? id : GUID.short(),
 		[
 			new Joint(TOP_JOINT, new Vector2(0, -14)),
 			new Joint(BOTTOM_JOINT, new Vector2(0, 14))
@@ -36,30 +39,32 @@ class Engine extends ShipPart
 			rotation: MathHelper.toRadians(270)
 		});
 
-		displayObject.swapChildren(sprite.displayObject, emitter.displayObject);
+		var texture = Texture.fromFrame('engine2.png');
+		addNode(sprite = new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
+		addShapeFromTexture(texture);
 	}
 
 	override public function update(delta:Float):Void
 	{
 		emitter.visible = false;
 
-		if(input.isDown(Codes.W))
+		if(input.isDown(Key.W))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * speed)));
 			emitter.visible = true;
 		}
 
-		if(input.isDown(Codes.S))
+		if(input.isDown(Key.S))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1 * speed)));
 		}
 
-		if(input.isDown(Codes.A))
+		if(input.isDown(Key.A))
 		{
 			body.applyAngularImpulse(-50 * speed);
 		}
 
-		if(input.isDown(Codes.D))
+		if(input.isDown(Key.D))
 		{
 			body.applyAngularImpulse(50 * speed);
 		}
@@ -68,12 +73,4 @@ class Engine extends ShipPart
 
 		super.update(delta);
 	}
-}
-
-class Codes
-{
-	public static inline var W:Int = 87;
-	public static inline var A:Int = 65;
-	public static inline var S:Int = 83;
-	public static inline var D:Int = 68;
 }

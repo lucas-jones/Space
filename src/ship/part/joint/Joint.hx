@@ -1,7 +1,7 @@
 package ship.part.joint;
 
+import ship.builder.ShipBuilder.Connection;
 import milkshake.utils.MathHelper;
-import haxe.Timer;
 import js.Error;
 import hsl.haxe.direct.DirectSignaler.DirectSignaler;
 import hsl.haxe.Signaler.Signaler;
@@ -23,12 +23,16 @@ class Joint
 	public var pairJoint(default, null):Joint;
 	public var weld(default, null):WeldJoint;
 
-	public function new(type:String, position:Vector2, rotation:Float = 0, ?pairJoint:Joint)
+	public var isConnected(get, never):Bool;
+	//True if it initited the connection
+	public var isConnector(default, null):Bool = false;
+
+	public function new(type:String, ?id:String, ?position:Vector2, rotation:Float = 0, ?pairJoint:Joint)
 	{
-		this.id = GUID.short();
+		this.id = id != null ? id : GUID.short();
 
 		this.type = type;
-		this.position = position;
+		this.position = position != null ? position : Vector2.ZERO;
 		this.rotation = rotation;
 		this.pairJoint = pairJoint;
 
@@ -39,12 +43,11 @@ class Joint
 	{
 		trace('Connecting ${part.type}:${type}(${part.id}:${id}) to ${joint.part.type}:${joint.type}(${joint.part.id}:${joint.id})');
 
-		if(isConnected() || joint.isConnected()) throw new Error('Tried to connect a joint that is already connected');
+		if(isConnected || joint.isConnected) throw new Error('Tried to connect a joint that is already connected');
 
 		pairJoint = joint;
 		joint.pairJoint = this;
-
-		//joint.part.rotation = rotation;
+		isConnector = true;
 
 		var weld = new WeldJoint(part.body, joint.part.body,
 		new Vec2(position.x, position.y),
@@ -62,8 +65,19 @@ class Joint
 		onConnected.dispatch(this);
 	}
 
-	public function isConnected():Bool
+	public function get_isConnected():Bool
 	{
 		return pairJoint != null;
+	}
+
+	public function getConnection():Connection
+	{
+		return
+		{
+			newPartId: pairJoint.part.id,
+			newPartJointType: pairJoint.type,
+			shipPartId: part.id,
+			shipJointType: type
+		}
 	}
 }
