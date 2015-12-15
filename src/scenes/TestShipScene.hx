@@ -78,84 +78,116 @@ class TestShipScene extends Scene
 		samplePoint = new Body();
         samplePoint.shapes.add(new Circle(0.001));
 
-
 		untyped window.ship = ship;
+
+		var graphic = new milkshake.core.Graphics();
+
+		// X
+		graphic.graphics.lineStyle(2, Color.RED);
+		graphic.graphics.moveTo(-10000, 0);
+		graphic.graphics.lineTo(10000, 0);
+
+		// Y
+		graphic.graphics.lineStyle(2, Color.RED);
+		graphic.graphics.moveTo(0, -10000);
+		graphic.graphics.lineTo(0, 10000);
+
+		addNode(graphic);
+
+		// if(Globals.DEBUG)
+		// {
+		// 	addNode(new PhysicsDebug(space));
+		// 	untyped window.ship = ship;
+		// }
+
+		orbit = new milkshake.core.Graphics();
+		addNode(orbit);
+
+>>>>>>> DIRTY CODE
 	}
+
+	var orbit:milkshake.core.Graphics;
 
 	function addPlanet():Void
 	{
 		//Add test planet
-		planet = new Body(BodyType.KINEMATIC);
-		var planetShape = new Circle(1200);
-		planet.shapes.add(planetShape);
-		planet.mass = 100;
-		space.bodies.add(planet);
+		// planet = new Body(BodyType.KINEMATIC);
+
+		// var planetShape = new Circle(1200);
+		// planet.shapes.add(planetShape);
+		// planet.mass = 100;
+		// space.bodies.add(planet);
 		// planet.position = new Vec2(Globals.SCREEN_CENTER.x - 200, Globals.SCREEN_HEIGHT + 800);
 
 		var grass = Texture.fromImage("assets/images/textures/grass_side.png");
 		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
 
+		
 		addNode(planetDisplay = new scenes.planet.Planet(grass, dirt));
-	}
 
+
+	}
+	var apple:Bool = false;
 	override public function update(delta:Float):Void
 	{
+		
+
+		
+		
+
+		var distance = Vector2.distance(Vector2.ZERO, ship.position);
+
+		
+		var inOrbit:Bool = false;
+		if(distance > 1500 && distance < 2500)
+		{
+			inOrbit = true;
+			var angle = Vector2.angle(Vector2.ZERO, ship.position);
+
+			var targetAngle:Float = angle + milkshake.utils.MathHelper.toRadians(10);
+
+			// trace(targetAngle);
+
+			var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
+			// ship.core.body.space = null;
+			if(apple == false)
+			{
+				// ship.core.body.position.x = targetPosition.x;
+				// ship.core.body.position.y = targetPosition.y;
+
+				apple = true;
+			}
+			else
+			{
+				if(Engine.engineON == false)
+				{
+					var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
+					ship.core.body.velocity.x = vector.x;
+					ship.core.body.velocity.y = vector.y;
+				}
+			}
+
+
+		}
+
+		// planetDisplay.position.x = planet.position.x;
+		// planetDisplay.position.y = planet.position.y;
+		// planetDisplay.rotation = planet.rotation;
+
 		super.update(delta);
 
 		space.step(1 / 24);
-		planetaryGravity(planet, 1 / 24);
-		// planet.rotation += 0.003;
 
-		planetDisplay.position.x = planet.position.x;
-		planetDisplay.position.y = planet.position.y;
-		planetDisplay.rotation = planet.rotation;
-	}
+		orbit.graphics.clear();
+		orbit.graphics.lineStyle(2, Color.WHITE);
+		orbit.graphics.drawCircle(0, 0, distance);
 
-
-	private var samplePoint:Body;
-
-	private function planetaryGravity(planet:Body, deltaTime:Float):Void
-	{
-			// Apply a gravitational impulse to all bodies
-			// pulling them to the closest point of a planetary body.
-			//
-			// Because this is a constantly applied impulse, whose value depends
-			// only on the positions of the objects, we can set the 'sleepable'
-			// of applyImpulse to be true and permit these bodies to still go to
-			// sleep.
-			//
-			// Applying a 'sleepable' impulse to a sleeping Body has no effect
-			// so we may as well simply iterate over the non-sleeping bodies.
-			var closestA:Vec2 = Vec2.get();
-			var closestB:Vec2 = Vec2.get();
-
-			for (i in 0 ... space.liveBodies.length)
-			{
-				var body:Body = space.liveBodies.at(i);
-				// Find closest points between bodies.
-				samplePoint.position.set(body.position);
-				var distance:Float = nape.geom.Geom.distanceBody(planet, samplePoint, closestA, closestB);
-
-				// Cut gravity off, well before distance threshold.
-				// if (distance > 100) {
-				// 	continue;
-				// }
-
-				// Gravitational force.
-				var force:Vec2 = closestA.sub(body.position, true);
-
-				// We don't use a true description of gravity, as it doesn't 'play' as nice.
-				force.length = body.mass * 1e6 / (distance * distance);
-
-				// Impulse to be applied = force * deltaTime
-				body.applyImpulse(
-					/*impulse*/ force.muleq(deltaTime),
-					/*position*/ null, // implies body.position
-					/*sleepable*/ true
-				);
-			}
-
-			closestA.dispose();
-			closestB.dispose();
+		orbit.graphics.lineStyle(2, Color.GREEN);
+		
+		if(inOrbit)
+		{
+			orbit.graphics.moveTo(0, 0);
+			orbit.graphics.lineTo(ship.position.x, ship.position.y);
+		}
 	}
 }
