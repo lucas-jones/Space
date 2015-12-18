@@ -1,6 +1,7 @@
 package scenes.planet;
 
 import milkshake.core.DisplayObject;
+import milkshake.utils.Color;
 import scenes.planet.Slice;
 import pixi.core.textures.Texture;
 import scenes.polygon.Polygon;
@@ -32,5 +33,18 @@ class Planet extends DisplayObject
 
 		var coreVerts = crust.generateUnderbelly([]);
 		addNode(corePolygon = new SmartPolygon(coreTexture, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(50)));
+
+
+		var graphic = new milkshake.core.Graphics();
+		graphic.graphics.lineStyle(2, Color.RED, 1);
+		graphic.graphics.beginFill(0xFF0000, 0.2);
+		graphic.graphics.drawCircle(0, 0, 1500);
+		addNode(graphic);
+
+		var graphic = new milkshake.core.Graphics();
+		graphic.graphics.lineStyle(2, 0xffa500, 1);
+		graphic.graphics.beginFill(0xffa500, 0.2);
+		graphic.graphics.drawCircle(0, 0, 2500);
+		addNode(graphic);
 	}
 }

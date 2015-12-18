@@ -39,6 +39,7 @@ class TestShipScene extends Scene
 		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], SpaceCameraPresets.FOLLOW, Color.BLUE);
 
 		followCam = cast cameras.currentCamera;
+		followCam.targetZoom = 0.5;
 
 		space = new Space(new Vec2());
 	}
@@ -52,9 +53,11 @@ class TestShipScene extends Scene
 
 		addNode(ship,
 		{
+			position: new Vector2(2800, 0),
 			anchor: Vector2.HALF,
-			position: new Vector2(Globals.SCREEN_CENTER.x, Globals.SCREEN_CENTER.y)
 		});
+
+
 
 		followCam.target = ship;
 
@@ -65,19 +68,49 @@ class TestShipScene extends Scene
 			addNode(new PhysicsDebug(space));
 			untyped window.ship = ship;
 		}
+
+		untyped window.ship = ship;
+
+		var graphic = new milkshake.core.Graphics();
+
+		// X
+		graphic.graphics.lineStyle(2, Color.RED);
+		graphic.graphics.moveTo(-10000, 0);
+		graphic.graphics.lineTo(10000, 0);
+
+		// Y
+		graphic.graphics.lineStyle(2, Color.RED);
+		graphic.graphics.moveTo(0, -10000);
+		graphic.graphics.lineTo(0, 10000);
+
+		addNode(graphic);
+
+		// if(Globals.DEBUG)
+		// {
+		// 	addNode(new PhysicsDebug(space));
+		// 	untyped window.ship = ship;
+		// }
+
+		orbit = new milkshake.core.Graphics();
+		addNode(orbit);
 	}
+
+	var orbit:milkshake.core.Graphics;
 
 	function addPlanet():Void
 	{
 		//Add test planet
-		planet = new Body(BodyType.KINEMATIC);
-		var planetShape = new Circle(300);
-		planet.shapes.add(planetShape);
-		space.bodies.add(planet);
-		planet.position = new Vec2(Globals.SCREEN_CENTER.x, Globals.SCREEN_HEIGHT);
+		// planet = new Body(BodyType.KINEMATIC);
+
+		// var planetShape = new Circle(1200);
+		// planet.shapes.add(planetShape);
+		// planet.mass = 100;
+		// space.bodies.add(planet);
+		// planet.position = new Vec2(Globals.SCREEN_CENTER.x - 200, Globals.SCREEN_HEIGHT + 800);
 
 		var grass = Texture.fromImage("assets/images/textures/grass_side.png");
 		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
+
 
 		addNode(planetDisplay = new scenes.planet.Planet(grass, dirt));
 	}
@@ -101,16 +134,50 @@ class TestShipScene extends Scene
 		return ship;
 	}
 
+
+	}
+	var apple:Bool = false;
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
 
+		var distance = Vector2.distance(Vector2.ZERO, ship.position);
+
+		var inOrbit:Bool = false;
+		if(distance > 1500 && distance < 2500)
+		{
+			inOrbit = true;
+			var angle = Vector2.angle(Vector2.ZERO, ship.position);
+
+			var targetAngle:Float = angle + milkshake.utils.MathHelper.toRadians(10);
+
+			// trace(targetAngle);
+
+			var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
+
+			var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
+			ship.core.body.velocity.x = vector.x;
+			ship.core.body.velocity.y = vector.y;
+		}
+
+		// planetDisplay.position.x = planet.position.x;
+		// planetDisplay.position.y = planet.position.y;
+		// planetDisplay.rotation = planet.rotation;
+
+
+
 		space.step(1 / 24);
 
-		planet.rotation += 0.003;
+		orbit.graphics.clear();
+		orbit.graphics.lineStyle(2, Color.WHITE);
+		orbit.graphics.drawCircle(0, 0, distance);
 
-		planetDisplay.position.x = planet.position.x;
-		planetDisplay.position.y = planet.position.y;
-		planetDisplay.rotation = planet.rotation;
+		orbit.graphics.lineStyle(2, Color.GREEN);
+
+		if(inOrbit)
+		{
+			orbit.graphics.moveTo(0, 0);
+			orbit.graphics.lineTo(ship.position.x, ship.position.y);
+		}
 	}
 }
