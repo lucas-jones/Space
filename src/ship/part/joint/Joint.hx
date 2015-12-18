@@ -57,10 +57,7 @@ class Joint
 		weld.breakUnderForce = true;
 		weld.removeOnBreak = true;
 		weld.maxForce = 20000;
-
 		part.body.space.constraints.add(weld);
-
-		//Timer.delay(function() {part.body.space.constraints.add(weld);}, 500);
 
 		onConnected.dispatch(this);
 	}

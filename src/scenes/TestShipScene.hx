@@ -1,5 +1,6 @@
 package scenes;
 
+import milkshake.core.Graphics;
 import haxe.Json;
 import scenes.camera.FollowCamera;
 import scenes.camera.SpaceCameraPresets;
@@ -17,7 +18,6 @@ import ship.builder.ShipBuilder;
 import ship.Ship;
 import milkshake.math.Vector2;
 import milkshake.utils.Globals;
-import milkshake.core.Sprite;
 import pixi.core.textures.Texture;
 import milkshake.assets.SpriteSheets;
 import milkshake.utils.Color;
@@ -26,13 +26,13 @@ import milkshake.game.scene.Scene;
 class TestShipScene extends Scene
 {
 	private var ship:Ship;
+	private var followCam:FollowCamera;
+	private var space:Space;
 
 	private var planetDisplay:Planet;
 	private var planet:Body;
 
-	private var space:Space;
-
-	private var followCam:FollowCamera;
+	private var orbit:Graphics;
 
 	public function new()
 	{
@@ -48,16 +48,13 @@ class TestShipScene extends Scene
 	{
 		this.addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
 
-		//ship = createShip();
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
 		addNode(ship,
 		{
 			position: new Vector2(2800, 0),
-			anchor: Vector2.HALF,
+			anchor: Vector2.HALF
 		});
-
-
 
 		followCam.target = ship;
 
@@ -68,8 +65,6 @@ class TestShipScene extends Scene
 			addNode(new PhysicsDebug(space));
 			untyped window.ship = ship;
 		}
-
-		untyped window.ship = ship;
 
 		var graphic = new milkshake.core.Graphics();
 
@@ -85,32 +80,20 @@ class TestShipScene extends Scene
 
 		addNode(graphic);
 
-		// if(Globals.DEBUG)
-		// {
-		// 	addNode(new PhysicsDebug(space));
-		// 	untyped window.ship = ship;
-		// }
+		if(Globals.DEBUG)
+		{
+			addNode(new PhysicsDebug(space));
+			untyped window.ship = ship;
+		}
 
 		orbit = new milkshake.core.Graphics();
 		addNode(orbit);
 	}
 
-	var orbit:milkshake.core.Graphics;
-
 	function addPlanet():Void
 	{
-		//Add test planet
-		// planet = new Body(BodyType.KINEMATIC);
-
-		// var planetShape = new Circle(1200);
-		// planet.shapes.add(planetShape);
-		// planet.mass = 100;
-		// space.bodies.add(planet);
-		// planet.position = new Vec2(Globals.SCREEN_CENTER.x - 200, Globals.SCREEN_HEIGHT + 800);
-
 		var grass = Texture.fromImage("assets/images/textures/grass_side.png");
 		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
-
 
 		addNode(planetDisplay = new scenes.planet.Planet(grass, dirt));
 	}
@@ -134,9 +117,6 @@ class TestShipScene extends Scene
 		return ship;
 	}
 
-
-	}
-	var apple:Bool = false;
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
@@ -151,20 +131,12 @@ class TestShipScene extends Scene
 
 			var targetAngle:Float = angle + milkshake.utils.MathHelper.toRadians(10);
 
-			// trace(targetAngle);
-
 			var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
 
 			var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
 			ship.core.body.velocity.x = vector.x;
 			ship.core.body.velocity.y = vector.y;
 		}
-
-		// planetDisplay.position.x = planet.position.x;
-		// planetDisplay.position.y = planet.position.y;
-		// planetDisplay.rotation = planet.rotation;
-
-
 
 		space.step(1 / 24);
 
