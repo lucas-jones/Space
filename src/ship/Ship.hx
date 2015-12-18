@@ -1,5 +1,6 @@
 package ship;
 
+import milkshake.core.Entity;
 import ship.builder.ShipBuilder.ShipDescriptor;
 import milkshake.math.GUID;
 import milkshake.math.Vector2;
@@ -12,12 +13,13 @@ import milkshake.core.DisplayObject;
 
 using Lambda;
 
-class Ship extends DisplayObject
+class Ship extends Entity
 {
 	public var name(default, null):String;
 	public var core(default, null):ShipPart;
 	public var parts(default, null):Map<String, ShipPart>;
 
+	private var displayObject:DisplayObject;
 	private var space:Space;
 
 	public function new(name:String, core:ShipPart, space:Space)
@@ -28,13 +30,25 @@ class Ship extends DisplayObject
 		this.space = space;
 		this.core = core;
 
+		displayObject = new DisplayObject('$name-displayObject');
+
+		onAddedToNode.bindVoid(function():Void
+		{
+			parent.addNode(displayObject);
+		});
+
+		onRemovedFromNode.bindVoid(function():Void
+		{
+			parent.removeNode(displayObject);
+		});
+
 		parts = new Map();
 		addPart(core);
 	}
 
 	public function addPart(newPart:ShipPart, ?newPartJoint:Joint, ?shipJoint:Joint):Void
 	{
-		addNode(newPart);
+		displayObject.addNode(newPart);
 		parts[newPart.id] = newPart;
 		space.bodies.add(newPart.body);
 
@@ -74,23 +88,9 @@ class Ship extends DisplayObject
 		{
 			this.x = this.core.body.position.x;
 			this.y = this.core.body.position.y;
-			//call super so we dont effect core body
-			super.set_rotation(this.core.body.rotation);
+			this.rotation = this.core.body.rotation;
 		}
 
 		super.update(delta);
-
-		//We never need to rotate this displayobject as the children handle it themselves.
-		displayObject.rotation = 0;
-	}
-
-	override function get_position():Vector2
-	{
-		if(this.core != null)
-		{
-			return new Vector2(core.body.position.x, core.body.position.y);
-		}
-
-		return super.get_position();
 	}
 }
