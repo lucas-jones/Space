@@ -13,6 +13,7 @@ class FollowCamera extends Camera
 		{
 			targetPosition.x = target.x;
 			targetPosition.y = target.y;
+			targetRotation = target.rotation;
 		}
 
 		super.update(delta);

@@ -74,13 +74,14 @@ class Ship extends DisplayObject
 		{
 			this.x = this.core.body.position.x;
 			this.y = this.core.body.position.y;
-			//TODO Fix relative rotation
 			//call super so we dont effect core body
-			//super.set_rotation(this.core.body.rotation);
-
+			super.set_rotation(this.core.body.rotation);
 		}
 
 		super.update(delta);
+
+		//We never need to rotate this displayobject as the children handle it themselves.
+		displayObject.rotation = 0;
 	}
 
 	override function get_position():Vector2

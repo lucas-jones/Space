@@ -52,46 +52,46 @@ class TestShipScene extends Scene
 
 		addNode(ship,
 		{
-			position: new Vector2(2800, 0),
+			position: new Vector2(2800, -1000),
 			anchor: Vector2.HALF
 		});
 
 		followCam.target = ship;
+		followCam.fixedRotation = false;
 
 		addPlanet();
 
 		if(Globals.DEBUG)
 		{
+			var graphic = new milkshake.core.Graphics();
+// X
+			graphic.graphics.lineStyle(2, Color.RED);
+			graphic.graphics.moveTo(-10000, 0);
+			graphic.graphics.lineTo(10000, 0);
+
+// Y
+			graphic.graphics.lineStyle(2, Color.RED);
+			graphic.graphics.moveTo(0, -10000);
+			graphic.graphics.lineTo(0, 10000);
+
+			addNode(graphic);
 			addNode(new PhysicsDebug(space));
+			addNode(orbit = new milkshake.core.Graphics());
 			untyped window.ship = ship;
 		}
 
-		var graphic = new milkshake.core.Graphics();
-
-		// X
-		graphic.graphics.lineStyle(2, Color.RED);
-		graphic.graphics.moveTo(-10000, 0);
-		graphic.graphics.lineTo(10000, 0);
-
-		// Y
-		graphic.graphics.lineStyle(2, Color.RED);
-		graphic.graphics.moveTo(0, -10000);
-		graphic.graphics.lineTo(0, 10000);
-
-		addNode(graphic);
-
-		if(Globals.DEBUG)
-		{
-			addNode(new PhysicsDebug(space));
-			untyped window.ship = ship;
-		}
-
-		orbit = new milkshake.core.Graphics();
-		addNode(orbit);
 	}
 
 	function addPlanet():Void
 	{
+		//Add test planet
+		planet = new Body(BodyType.KINEMATIC);
+		var planetShape = new Circle(1200);
+		planet.shapes.add(planetShape);
+		planet.mass = 100;
+		space.bodies.add(planet);
+		//planet.position = new Vec2(Globals.SCREEN_CENTER.x - 200, Globals.SCREEN_HEIGHT + 800);
+
 		var grass = Texture.fromImage("assets/images/textures/grass_side.png");
 		var dirt = Texture.fromImage("assets/images/textures/dirt.png");
 
@@ -140,16 +140,19 @@ class TestShipScene extends Scene
 
 		space.step(1 / 24);
 
-		orbit.graphics.clear();
-		orbit.graphics.lineStyle(2, Color.WHITE);
-		orbit.graphics.drawCircle(0, 0, distance);
-
-		orbit.graphics.lineStyle(2, Color.GREEN);
-
-		if(inOrbit)
+		if(Globals.DEBUG)
 		{
-			orbit.graphics.moveTo(0, 0);
-			orbit.graphics.lineTo(ship.position.x, ship.position.y);
+			orbit.graphics.clear();
+			orbit.graphics.lineStyle(2, Color.WHITE);
+			orbit.graphics.drawCircle(0, 0, distance);
+
+			orbit.graphics.lineStyle(2, Color.GREEN);
+
+			if(inOrbit)
+			{
+				orbit.graphics.moveTo(0, 0);
+				orbit.graphics.lineTo(ship.position.x, ship.position.y);
+			}
 		}
 	}
 }
