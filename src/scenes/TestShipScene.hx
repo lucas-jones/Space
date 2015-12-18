@@ -1,5 +1,6 @@
 package scenes;
 
+import player.Player;
 import milkshake.core.Graphics;
 import haxe.Json;
 import scenes.camera.FollowCamera;
@@ -36,10 +37,10 @@ class TestShipScene extends Scene
 
 	public function new()
 	{
-		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS], SpaceCameraPresets.FOLLOW, Color.BLUE);
+		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS, SpriteSheets.PLAYER], SpaceCameraPresets.FOLLOW, Color.BLUE);
 
 		followCam = cast cameras.currentCamera;
-		followCam.targetZoom = 0.5;
+		followCam.targetZoom = 1.5;
 
 		space = new Space(new Vec2());
 	}
@@ -60,6 +61,7 @@ class TestShipScene extends Scene
 		followCam.fixedRotation = false;
 
 		addPlanet();
+		//addPlayer();
 
 		if(Globals.DEBUG)
 		{
@@ -80,6 +82,14 @@ class TestShipScene extends Scene
 			untyped window.ship = ship;
 		}
 
+	}
+
+	function addPlayer():Void
+	{
+		addNode(new Player(space),
+		{
+			position: ship.position//new Vector2(ship.x, ship.y)
+		});
 	}
 
 	function addPlanet():Void
