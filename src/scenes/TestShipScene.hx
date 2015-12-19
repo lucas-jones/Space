@@ -3,6 +3,7 @@ package scenes;
 import player.Player;
 import milkshake.core.Graphics;
 import haxe.Json;
+import milkshake.utils.MathHelper;
 import scenes.camera.FollowCamera;
 import scenes.camera.SpaceCameraPresets;
 import nape.phys.BodyType;
@@ -59,6 +60,7 @@ class TestShipScene extends Scene
 
 		followCam.target = ship;
 		followCam.fixedRotation = false;
+		followCam.targetZoom = 0.5;
 
 		addPlanet();
 		//addPlayer();
@@ -66,12 +68,13 @@ class TestShipScene extends Scene
 		if(Globals.DEBUG)
 		{
 			var graphic = new milkshake.core.Graphics();
-// X
+			
+			// X
 			graphic.graphics.lineStyle(2, Color.RED);
 			graphic.graphics.moveTo(-10000, 0);
 			graphic.graphics.lineTo(10000, 0);
 
-// Y
+			// Y
 			graphic.graphics.lineStyle(2, Color.RED);
 			graphic.graphics.moveTo(0, -10000);
 			graphic.graphics.lineTo(0, 10000);
@@ -136,32 +139,48 @@ class TestShipScene extends Scene
 		var inOrbit:Bool = false;
 		if(distance > 1500 && distance < 2500)
 		{
+			// distance = 1800;
 			inOrbit = true;
+
 			var angle = Vector2.angle(Vector2.ZERO, ship.position);
+			var targetAngle = angle + MathHelper.toRadians(2);
 
-			var targetAngle:Float = angle + milkshake.utils.MathHelper.toRadians(10);
+			if(!Engine.IN_USE)
+			{
+				var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
+				
+				var targetVelocity = targetPosition.sub(new Vector2(ship.position.x, ship.position.y));
 
-			var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
+				ship.core.body.velocity.x = MathHelper.lerp(ship.core.body.velocity.x, targetVelocity.x, 0.1);
+				ship.core.body.velocity.y = MathHelper.lerp(ship.core.body.velocity.y, targetVelocity.y, 0.1);
 
-			var vector = new Vector2(targetPosition.x, targetPosition.y).sub(new Vector2(ship.position.x, ship.position.y)).devf(10);
-			ship.core.body.velocity.x = vector.x;
-			ship.core.body.velocity.y = vector.y;
+			}
 		}
 
 		space.step(1 / 24);
-
+		
 		if(Globals.DEBUG)
 		{
 			orbit.graphics.clear();
+
 			orbit.graphics.lineStyle(2, Color.WHITE);
 			orbit.graphics.drawCircle(0, 0, distance);
 
 			orbit.graphics.lineStyle(2, Color.GREEN);
-
+			
 			if(inOrbit)
 			{
-				orbit.graphics.moveTo(0, 0);
-				orbit.graphics.lineTo(ship.position.x, ship.position.y);
+				orbit.graphics.clear();
+				orbit.graphics.lineStyle(2, Color.WHITE);
+				orbit.graphics.drawCircle(0, 0, distance);
+
+				orbit.graphics.lineStyle(2, Color.GREEN);
+
+				if(inOrbit)
+				{
+					orbit.graphics.moveTo(0, 0);
+					orbit.graphics.lineTo(ship.position.x, ship.position.y);
+				}
 			}
 		}
 	}

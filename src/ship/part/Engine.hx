@@ -14,6 +14,8 @@ import pixi.core.textures.Texture;
 
 class Engine extends ShipPart
 {
+	public static var IN_USE:Bool = false;
+
 	public static inline var TOP_JOINT:String = 'engine_top';
 	public static inline var BOTTOM_JOINT:String = 'engine_bottom';
 
@@ -69,6 +71,8 @@ class Engine extends ShipPart
 			body.applyAngularImpulse(50 * speed);
 		}
 
+		IN_USE = emitter.visible;
+		
 		emitter.update(delta);
 
 		super.update(delta);
