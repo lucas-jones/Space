@@ -48,7 +48,7 @@ class TestShipScene extends Scene
 
 	override public function create():Void
 	{
-		this.addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
+		addNode(new Background(Texture.fromImage("assets/images/dino/stars.png")));
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
@@ -63,12 +63,11 @@ class TestShipScene extends Scene
 		followCam.targetZoom = 0.5;
 
 		addPlanet();
-		//addPlayer();
 
 		if(Globals.DEBUG)
 		{
 			var graphic = new milkshake.core.Graphics();
-			
+
 			// X
 			graphic.graphics.lineStyle(2, Color.RED);
 			graphic.graphics.moveTo(-10000, 0);
@@ -85,14 +84,6 @@ class TestShipScene extends Scene
 			untyped window.ship = ship;
 		}
 
-	}
-
-	function addPlayer():Void
-	{
-		addNode(new Player(space),
-		{
-			position: ship.position//new Vector2(ship.x, ship.y)
-		});
 	}
 
 	function addPlanet():Void
@@ -148,7 +139,7 @@ class TestShipScene extends Scene
 			if(!Engine.IN_USE)
 			{
 				var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
-				
+
 				var targetVelocity = targetPosition.sub(new Vector2(ship.position.x, ship.position.y));
 
 				ship.core.body.velocity.x = MathHelper.lerp(ship.core.body.velocity.x, targetVelocity.x, 0.1);
@@ -158,7 +149,7 @@ class TestShipScene extends Scene
 		}
 
 		space.step(1 / 24);
-		
+
 		if(Globals.DEBUG)
 		{
 			orbit.graphics.clear();
@@ -167,7 +158,7 @@ class TestShipScene extends Scene
 			orbit.graphics.drawCircle(0, 0, distance);
 
 			orbit.graphics.lineStyle(2, Color.GREEN);
-			
+
 			if(inOrbit)
 			{
 				orbit.graphics.clear();

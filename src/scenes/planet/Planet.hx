@@ -37,7 +37,6 @@ class Planet extends DisplayObject
 
 		if(Globals.DEBUG)
 		{
-
 			var graphic = new milkshake.core.Graphics();
 			graphic.graphics.lineStyle(2, Color.RED, 1);
 			graphic.graphics.beginFill(0xFF0000, 0.2);

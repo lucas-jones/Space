@@ -1,7 +1,6 @@
 package ship;
 
 import milkshake.core.Entity;
-import ship.builder.ShipBuilder.ShipDescriptor;
 import milkshake.math.GUID;
 import milkshake.math.Vector2;
 import nape.geom.Vec2;
@@ -18,6 +17,7 @@ class Ship extends Entity
 	public var name(default, null):String;
 	public var core(default, null):ShipPart;
 	public var parts(default, null):Map<String, ShipPart>;
+	public var resourceManager(default, null):ResourceManager;
 
 	private var displayObject:DisplayObject;
 	private var space:Space;
@@ -29,6 +29,7 @@ class Ship extends Entity
 		this.name = name;
 		this.space = space;
 		this.core = core;
+		addNode(this.resourceManager = new ResourceManager());
 
 		displayObject = new DisplayObject('$name-displayObject');
 
