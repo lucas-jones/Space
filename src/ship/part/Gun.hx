@@ -54,6 +54,8 @@ class Gun extends ShipPart
 
 	override public function update(delta:Float):Void
 	{
+		input.update(delta);
+		
 		if(input.isDown(32))
 		{
 			createBullet();

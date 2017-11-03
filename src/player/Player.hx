@@ -38,12 +38,14 @@ class Player extends DisplayObject
 		body.shapes.add(new Circle(10));
 		space.bodies.add(body);
 
+		body.allowRotation = false;
+
 		untyped window.body = body;
 
 		if(milkshake.utils.Globals.DEBUG)
 		{
 			var graphic = new milkshake.core.Graphics();
-			graphic.graphics.lineStyle(2, Color.GREEN, 1);
+			graphic.graphics.lineStyle(2, Color.Green, 1);
 			graphic.graphics.beginFill(0xFF0000, 0.2);
 			graphic.graphics.drawCircle(0, 0, 10);
 			addNode(graphic);
@@ -77,9 +79,21 @@ class Player extends DisplayObject
 
 	override public function update(deltaTime:Float):Void
 	{
-		if(input.isDown(Key.SPACE) && canJump())
+		input.update(deltaTime);
+
+		if(input.isDown(Key.SPACEBAR) && canJump())
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -25)));
+		}
+
+		if(input.isDown(Key.D))
+		{
+			body.applyImpulse(body.localVectorToWorld(new Vec2(5, 0)));
+		}
+
+		if(input.isDown(Key.A))
+		{
+			body.applyImpulse(body.localVectorToWorld(new Vec2(-5, 0)));
 		}
 
 		if(body != null)

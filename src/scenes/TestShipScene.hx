@@ -38,7 +38,7 @@ class TestShipScene extends Scene
 
 	public function new()
 	{
-		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS, SpriteSheets.PLAYER], SpaceCameraPresets.FOLLOW, Color.BLUE);
+		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS, SpriteSheets.PLAYER], SpaceCameraPresets.FOLLOW, Color.Blue);
 
 		followCam = cast cameras.currentCamera;
 		followCam.targetZoom = 1.5;
@@ -69,12 +69,12 @@ class TestShipScene extends Scene
 			var graphic = new milkshake.core.Graphics();
 
 			// X
-			graphic.graphics.lineStyle(2, Color.RED);
+			graphic.graphics.lineStyle(2, Color.Red);
 			graphic.graphics.moveTo(-10000, 0);
 			graphic.graphics.lineTo(10000, 0);
 
 			// Y
-			graphic.graphics.lineStyle(2, Color.RED);
+			graphic.graphics.lineStyle(2, Color.Red);
 			graphic.graphics.moveTo(0, -10000);
 			graphic.graphics.lineTo(0, 10000);
 
@@ -154,18 +154,18 @@ class TestShipScene extends Scene
 		{
 			orbit.graphics.clear();
 
-			orbit.graphics.lineStyle(2, Color.WHITE);
+			orbit.graphics.lineStyle(2, Color.White);
 			orbit.graphics.drawCircle(0, 0, distance);
 
-			orbit.graphics.lineStyle(2, Color.GREEN);
+			orbit.graphics.lineStyle(2, Color.Green);
 
 			if(inOrbit)
 			{
 				orbit.graphics.clear();
-				orbit.graphics.lineStyle(2, Color.WHITE);
+				orbit.graphics.lineStyle(2, Color.White);
 				orbit.graphics.drawCircle(0, 0, distance);
 
-				orbit.graphics.lineStyle(2, Color.GREEN);
+				orbit.graphics.lineStyle(2, Color.Green);
 
 				if(inOrbit)
 				{

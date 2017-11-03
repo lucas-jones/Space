@@ -25,13 +25,13 @@ class TestPlayerScene extends Scene
 
 	public function new()
 	{
-		super("TestPlayerScene", [ SpriteSheets.PLAYER ], SpaceCameraPresets.FOLLOW, Color.BLUE);
+		super("TestPlayerScene", [ SpriteSheets.PLAYER ], SpaceCameraPresets.FOLLOW, Color.Blue);
 
 		followCam = cast cameras.currentCamera;
 		followCam.targetZoom = 2.5;
 		followCam.fixedRotation = false;
 
-		space = new Space(new Vec2(0, 100));
+		space = new Space(new Vec2(0, 0));
 	}
 
 	override public function create():Void
@@ -79,6 +79,7 @@ class TestPlayerScene extends Scene
 	override public function update(deltaTime:Float):Void
 	{
 		space.step(1 / 24);
+
 		super.update(deltaTime);
 	}
 }

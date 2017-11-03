@@ -1,10 +1,9 @@
 -main SpaceGame
 
--cp libs/milkshake/src
--cp libs/milkshake/libs
 -cp src
 -cp libs
 
+-lib milkshake
 -lib compiletime
 -lib mconsole
 -lib actuate

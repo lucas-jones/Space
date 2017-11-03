@@ -43,7 +43,7 @@ class ShipPart extends DisplayObject
 
 		if(Globals.DEBUG)
 		{
-			addNode(GraphicsHelper.generateRectangle(10, 10, Color.RED, true), { position: joint.position });
+			addNode(GraphicsHelper.generateRectangle(10, 10, Color.Red, true), { position: joint.position });
 		}
 	}
 

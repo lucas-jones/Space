@@ -50,6 +50,8 @@ class Engine extends ShipPart
 	{
 		emitter.visible = false;
 
+		input.update(delta);
+
 		if(input.isDown(Key.W))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * speed)));
@@ -59,6 +61,16 @@ class Engine extends ShipPart
 		if(input.isDown(Key.S))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1 * speed)));
+		}
+
+		if(input.isDown(Key.Q))
+		{
+			body.applyImpulse(body.localVectorToWorld(new Vec2(1 * speed, 0)));
+		}
+
+		if(input.isDown(Key.E))
+		{
+			body.applyImpulse(body.localVectorToWorld(new Vec2(-1 * speed, 0)));
 		}
 
 		if(input.isDown(Key.A))
