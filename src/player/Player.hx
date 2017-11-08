@@ -36,11 +36,14 @@ class Player extends DisplayObject
 
 		body = new Body(BodyType.DYNAMIC);
 		body.shapes.add(new Circle(10));
+		body.mass = 0.1;
 		space.bodies.add(body);
 
 		body.allowRotation = false;
 
 		untyped window.body = body;
+
+		
 
 		if(milkshake.utils.Globals.DEBUG)
 		{
@@ -88,12 +91,12 @@ class Player extends DisplayObject
 
 		if(input.isDown(Key.D))
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(5, 0)));
+			body.applyImpulse(body.localVectorToWorld(new Vec2(1, 0)));
 		}
 
 		if(input.isDown(Key.A))
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(-5, 0)));
+			body.applyImpulse(body.localVectorToWorld(new Vec2(-1, 0)));
 		}
 
 		if(body != null)
