@@ -10,7 +10,7 @@ class SpaceGame
 	{
 		var milkshake = Milkshake.boot(new Settings(Globals.SCREEN_WIDTH, Globals.SCREEN_HEIGHT));
 
-		milkshake.scenes.addScene(new scenes.TestPlayerScene());
-		//milkshake.scenes.addScene(new scenes.TestShipScene());
+		// milkshake.scenes.addScene(new scenes.TestPlayerScene());
+		milkshake.scenes.addScene(new scenes.TestShipScene());
 	}
 }
