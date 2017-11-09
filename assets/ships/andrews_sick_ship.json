@@ -32,6 +32,10 @@
 		{
 			"type":"gun",
 			"id":"6Uu7kafgj14Fkk9rdtC9KW"
+		},
+		{
+			"type":"landing-gear",
+			"id":"4GT7kafgj14Fkk9rdtC9KL"
 		}
 	],
 	"connections":[
@@ -70,6 +74,12 @@
 			"newPartJointType":"gun_top",
 			"shipPartId":"2YvDomNzI3cjRa2LJL3cRp",
 			"shipJointType":"gun_bottom_left"
+		},
+		{
+			"newPartId":"4GT7kafgj14Fkk9rdtC9KL",
+			"newPartJointType":"top",
+			"shipPartId":"i28uNoDwadx1JPhbVa0oS7",
+			"shipJointType":"engine_top"
 		}
 	]
 }
