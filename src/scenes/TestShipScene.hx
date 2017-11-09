@@ -57,7 +57,7 @@ class TestShipScene extends Scene
 	override public function create():Void
 	{
 		addNode(new Background(Texture.fromImage("assets/images/backgrounds/darkPurple.png")));
-
+		
 		addPlanet();
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
@@ -69,7 +69,7 @@ class TestShipScene extends Scene
 		});
 
 		followCam.target = ship;
-		followCam.targetZoom = 0.5;
+		followCam.zoom = 0.5;
 
 		if(Globals.DEBUG)
 		{
@@ -146,7 +146,7 @@ class TestShipScene extends Scene
 			});
 
 			followCam.target = player;
-			followCam.targetZoom = 1.5;
+			followCam.zoom = 1.5;
 
 			playerLaunched = true;
 		}
