@@ -9,6 +9,9 @@ import nape.geom.Vec2;
 import milkshake.math.Vector2;
 import milkshake.components.input.Key;
 import milkshake.components.input.Input;
+import scenes.particle.ParticlePresets;
+import milkshake.core.ParticleEmitter;
+import milkshake.utils.MathHelper;
 import pixi.core.textures.Texture;
 import milkshake.core.Sprite;
 import milkshake.core.DisplayObject;
@@ -21,12 +24,20 @@ class Player extends DisplayObject
 	var sprite:Sprite;
 	var texture:Texture;
 	var input:Input;
+	var emitter:ParticleEmitter;
 
 	public function new(space:Space)
 	{
 		super('player');
 		input = new Input();
-		
+
+		addNode(emitter = ParticlePresets.FIRE,
+		{
+			position: new Vector2(0, 10),
+			rotation: MathHelper.toRadians(90),
+			scale: new Vector2(0.2, 0.4)
+		});
+
 		addNode(sprite = new Sprite(texture = Texture.fromFrame("alienBeige_stand.png")),
 		{
 			anchor: new Vector2(0.5, 0.7),
@@ -41,8 +52,6 @@ class Player extends DisplayObject
 		body.allowRotation = false;
 
 		untyped window.body = body;
-
-		
 
 		if(milkshake.utils.Globals.DEBUG)
 		{
@@ -81,10 +90,13 @@ class Player extends DisplayObject
 
 	override public function update(deltaTime:Float):Void
 	{
+		emitter.visible = false;
+
 		input.update(deltaTime);
 
 		if(input.isDown(Key.SPACEBAR) || input.isDown(Key.W))
 		{
+			emitter.visible = true;
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1)));
 		}
 
@@ -103,7 +115,6 @@ class Player extends DisplayObject
 		if(input.isDown(Key.S))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1)));
-			
 		}
 
 		if(body != null)

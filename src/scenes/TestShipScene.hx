@@ -49,7 +49,7 @@ class TestShipScene extends Scene
 		followCam = cast cameras.currentCamera;
 		followCam.targetZoom = 1.5;
 
-		space = new Space(new Vec2(0,0));
+		space = new Space(new Vec2(0, 0));
 
 		input = new Input();
 	}
@@ -60,7 +60,7 @@ class TestShipScene extends Scene
 
 		addNode(sky = milkshake.utils.GraphicsHelper.generateRectangle(100000, 100000, Color.SkyBlue, true));
 
-		
+
 
 		addPlanet();
 
@@ -111,7 +111,7 @@ class TestShipScene extends Scene
 		var planetPos = new Vector2(Globals.SCREEN_CENTER.x, Globals.SCREEN_CENTER.y);
 		planet.shapes.add(planetShape);
 		planet.mass = 1;
-		
+
 		planet.position = new nape.geom.Vec2(planetPos.x, planetPos.y);
 		space.bodies.add(planet);
 	}
@@ -138,7 +138,7 @@ class TestShipScene extends Scene
 	{
 		super.update(delta);
 
-		var distance = Vector2.distance(new Vector2(planet.position.x, planet.position.y), followCam.target.position);	
+		var distance = Vector2.distance(new Vector2(planet.position.x, planet.position.y), followCam.target.position);
 
 		sky.alpha = MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
 
@@ -158,9 +158,6 @@ class TestShipScene extends Scene
 
 			playerLaunched = true;
 		}
-
-
-
 
 		// var distance = Vector2.distance(Vector2.ZERO, ship.position);
 
@@ -218,49 +215,46 @@ class TestShipScene extends Scene
 
 	private function planetaryGravity(planet:Body, deltaTime:Float):Void
 	{
-            // Apply a gravitational impulse to all bodies
-            // pulling them to the closest point of a planetary body.
-            //
-            // Because this is a constantly applied impulse, whose value depends
-            // only on the positions of the objects, we can set the 'sleepable'
-            // of applyImpulse to be true and permit these bodies to still go to
-            // sleep.
-            //
-            // Applying a 'sleepable' impulse to a sleeping Body has no effect
-            // so we may as well simply iterate over the non-sleeping bodies.
-            var closestA:Vec2 = Vec2.get();
-            var closestB:Vec2 = Vec2.get();
+			// Apply a gravitational impulse to all bodies
+			// pulling them to the closest point of a planetary body.
+			//
+			// Because this is a constantly applied impulse, whose value depends
+			// only on the positions of the objects, we can set the 'sleepable'
+			// of applyImpulse to be true and permit these bodies to still go to
+			// sleep.
+			//
+			// Applying a 'sleepable' impulse to a sleeping Body has no effect
+			// so we may as well simply iterate over the non-sleeping bodies.
+			var closestA:Vec2 = Vec2.get();
+			var closestB:Vec2 = Vec2.get();
 
+			for(body in space.liveBodies)
+			{
+				// Find closest points between bodies.
 
+				var distance:Float = Geom.distanceBody(planet, body, closestA, closestB);
 
-            for(body in space.liveBodies)
-            {
-                // Find closest points between bodies.
-                
-                var distance:Float = Geom.distanceBody(planet, body, closestA, closestB);
+				// Cut gravity off, well before distance threshold.
+				// if (distance > 100) {
+				//     continue;
+				// }
 
-                // Cut gravity off, well before distance threshold.
-                // if (distance > 100) {
-                //     continue;
-                // }
+				// Gravitational force.
+				var force:Vec2 = closestA.sub(body.position, true);
+				var distance = Vector2.distance(new Vector2(planet.position.x, planet.position.y), followCam.target.position);
+				if(player != null && body == player.body) player.rotation = force.angle - milkshake.utils.MathHelper.toRadians(90);
+				// We don't use a true description of gravity, as it doesn't 'play' as nice.
+				force.length = 20 * MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
 
+				// Impulse to be applied = force * deltaTime
+				body.applyImpulse(
+					/*impulse*/ force.muleq(deltaTime),
+					/*position*/ null, // implies body.position
+					/*sleepable*/ true
+				);
+			}
 
-                // Gravitational force.
-                var force:Vec2 = closestA.sub(body.position, true);
-
-                if(player != null && body == player.body) player.rotation = force.angle - milkshake.utils.MathHelper.toRadians(90);
-                // We don't use a true description of gravity, as it doesn't 'play' as nice.
-                force.length = 7;
-
-                // Impulse to be applied = force * deltaTime
-                body.applyImpulse(
-                    /*impulse*/ force.muleq(deltaTime),
-                    /*position*/ null, // implies body.position
-                    /*sleepable*/ true
-                );
-            }
-
-            closestA.dispose();
-            closestB.dispose();
+			closestA.dispose();
+			closestB.dispose();
     }
 }
