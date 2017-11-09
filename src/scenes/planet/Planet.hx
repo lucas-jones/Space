@@ -42,6 +42,15 @@ class Planet extends DisplayObject
 		"assets/images/backgrounds/cloud9png",
 	];
 
+	public static var GRASS_ASSETS = [
+		"assets/images/backgrounds/grass1.png",
+		"assets/images/backgrounds/grass2.png",
+		"assets/images/backgrounds/grass3.png",
+		"assets/images/backgrounds/grass4.png",
+		"assets/images/backgrounds/grass5.png",
+		"assets/images/backgrounds/grass6.png"
+	];
+
 	var crust:Slice;
 	var crustPolygon:Polygon;
 	var corePolygon:SmartPolygon;
@@ -55,6 +64,11 @@ class Planet extends DisplayObject
 		for(x in 0 ... 40)
 		{
 			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(TREE_ASSETS))), Random.float(0, 360)));
+		}
+
+		for(x in 0 ... 20)
+		{
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(GRASS_ASSETS))), Random.float(0, 360)));
 		}
 
 		addNode(clouds = new DisplayObject());
