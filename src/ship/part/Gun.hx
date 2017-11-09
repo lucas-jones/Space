@@ -38,9 +38,11 @@ class Gun extends ShipPart
 	private function createBullet():Void
 	{
 		var bullet = new Bullet();
-		addNode(bullet,
+		
+		parent.addNode(bullet,
 		{
-			position: new Vector2(-4, 0)
+			position: new Vector2(body.position.x, body.position.y),
+			rotation: body.rotation
 		});
 
 		bullets.push(bullet);
