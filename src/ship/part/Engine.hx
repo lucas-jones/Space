@@ -19,7 +19,7 @@ class Engine extends ShipPart
 	public static inline var TOP_JOINT:String = 'engine_top';
 	public static inline var BOTTOM_JOINT:String = 'engine_bottom';
 
-	public var speed:Float = 2;
+	public var speed:Float = 10;
 
 	private var input:Input;
 

@@ -14,7 +14,6 @@ import milkshake.core.Sprite;
 import milkshake.core.DisplayObject;
 import milkshake.utils.Color;
 
-
 class Player extends DisplayObject
 {
 	public var body:Body;
@@ -27,7 +26,7 @@ class Player extends DisplayObject
 	{
 		super('player');
 		input = new Input();
-
+		
 		addNode(sprite = new Sprite(texture = Texture.fromFrame("alienBeige_stand.png")),
 		{
 			anchor: new Vector2(0.5, 0.5),
@@ -36,7 +35,7 @@ class Player extends DisplayObject
 
 		body = new Body(BodyType.DYNAMIC);
 		body.shapes.add(new Circle(10));
-		body.mass = 0.1;
+		body.mass = 0.3;
 		space.bodies.add(body);
 
 		body.allowRotation = false;
@@ -84,9 +83,9 @@ class Player extends DisplayObject
 	{
 		input.update(deltaTime);
 
-		if(input.isDown(Key.SPACEBAR) && canJump())
+		if(input.isDown(Key.SPACEBAR) || input.isDown(Key.W))
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -25)));
+			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1)));
 		}
 
 		if(input.isDown(Key.D))
