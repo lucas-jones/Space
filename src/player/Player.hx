@@ -102,7 +102,7 @@ class Player extends DisplayObject
 
 		if(input.isDown(Key.S))
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(1, 0)));
+			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1)));
 			
 		}
 
