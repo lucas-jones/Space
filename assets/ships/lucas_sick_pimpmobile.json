@@ -1,0 +1,25 @@
+{
+	"name":"lucas sick pimpmobile",
+	"core":{
+		"type":"cockpit",
+		"id":"gvHDkGBRrV62vMaYRpIrPX"
+	},
+	"parts":[
+		{
+			"type":"cockpit",
+			"id":"gvHDkGBRrV62vMaYRpIrPX"
+		},
+		{
+			"type":"wheel",
+			"id":"i28uNoDwadx1JPhbVa0oS7"
+		}
+	],
+	"connections":[
+		{
+			"newPartId":"gvHDkGBRrV62vMaYRpIrPX",
+			"newPartJointType":"cockpit_bottom",
+			"shipPartId":"i28uNoDwadx1JPhbVa0oS7",
+			"shipJointType":"wheel_top"
+		}
+	]
+}
