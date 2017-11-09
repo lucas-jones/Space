@@ -29,8 +29,8 @@ class Player extends DisplayObject
 		
 		addNode(sprite = new Sprite(texture = Texture.fromFrame("alienBeige_stand.png")),
 		{
-			anchor: new Vector2(0.5, 0.5),
-			scale: Vector2.EQUAL(0.1),
+			anchor: new Vector2(0.5, 0.7),
+			scale: Vector2.EQUAL(0.2),
 		});
 
 		body = new Body(BodyType.DYNAMIC);
@@ -91,11 +91,19 @@ class Player extends DisplayObject
 		if(input.isDown(Key.D))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(1, 0)));
+			scale.x = Math.abs(scale.x);
 		}
 
 		if(input.isDown(Key.A))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(-1, 0)));
+			scale.x = -Math.abs(scale.x);
+		}
+
+		if(input.isDown(Key.S))
+		{
+			body.applyImpulse(body.localVectorToWorld(new Vec2(1, 0)));
+			
 		}
 
 		if(body != null)
