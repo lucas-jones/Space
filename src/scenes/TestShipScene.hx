@@ -53,11 +53,15 @@ class TestShipScene extends Scene
 
 		input = new Input();
 	}
-
+	var sky:Graphics;
 	override public function create():Void
 	{
 		addNode(new Background(Texture.fromImage("assets/images/backgrounds/darkPurple.png")));
+
+		addNode(sky = milkshake.utils.GraphicsHelper.generateRectangle(100000, 100000, Color.SkyBlue, true));
+
 		
+
 		addPlanet();
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
@@ -133,6 +137,10 @@ class TestShipScene extends Scene
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
+
+		var distance = Vector2.distance(new Vector2(planet.position.x, planet.position.y), followCam.target.position);	
+
+		sky.alpha = MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
 
 		input.update(delta);
 
