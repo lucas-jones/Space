@@ -1,22 +1,68 @@
 package scenes.planet;
 
-import milkshake.utils.Globals;
 import milkshake.core.DisplayObject;
+import milkshake.core.Sprite;
+import milkshake.math.Vector2;
 import milkshake.utils.Color;
-import scenes.planet.Slice;
+import milkshake.utils.Globals;
+import milkshake.utils.MathHelper;
 import pixi.core.textures.Texture;
+import scenes.planet.Slice;
 import scenes.polygon.Polygon;
 import scenes.polygon.SmartPolygon;
 
+import milkshake.utils.Random;
+
 class Planet extends DisplayObject
 {
+	public static var TREE_ASSETS = [
+		"assets/images/backgrounds/tree01.png",
+		"assets/images/backgrounds/tree02.png",
+		"assets/images/backgrounds/tree03.png",
+		"assets/images/backgrounds/tree05.png",
+		"assets/images/backgrounds/tree07.png",
+		"assets/images/backgrounds/tree08.png",
+		"assets/images/backgrounds/tree10.png",
+		"assets/images/backgrounds/tree11.png",
+		"assets/images/backgrounds/tree13.png",
+		"assets/images/backgrounds/tree14.png",
+		"assets/images/backgrounds/tree20.png",
+		"assets/images/backgrounds/tree21.png"
+	];
+
+	public static var CLOUD_ASSETS = [
+		"assets/images/backgrounds/cloud1.png",
+		"assets/images/backgrounds/cloud2.png",
+		"assets/images/backgrounds/cloud3.png",
+		"assets/images/backgrounds/cloud4.png",
+		"assets/images/backgrounds/cloud5.png",
+		"assets/images/backgrounds/cloud6.png",
+		"assets/images/backgrounds/cloud7.png",
+		"assets/images/backgrounds/cloud8.png",
+		"assets/images/backgrounds/cloud9png",
+	];
+
 	var crust:Slice;
 	var crustPolygon:Polygon;
 	var corePolygon:SmartPolygon;
 
+	var clouds:DisplayObject;
+
 	public function new(crustTexture:Texture, coreTexture:Texture)
 	{
 		super();
+
+		for(x in 0 ... 40)
+		{
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(TREE_ASSETS))), Random.float(0, 360)));
+		}
+
+		addNode(clouds = new DisplayObject());
+		
+		for(x in 0 ... 20)
+		{
+			clouds.addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(CLOUD_ASSETS))), Random.float(0, 360), 1700));
+		}
 
 		crust = new Slice();
 
@@ -33,7 +79,7 @@ class Planet extends DisplayObject
 		addNode(crustPolygon = new Polygon(crustTexture, verts, uvs, indicies));
 
 		var coreVerts = crust.generateUnderbelly([]);
-		addNode(corePolygon = new SmartPolygon(coreTexture, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(50)));
+		addNode(corePolygon = new SmartPolygon(coreTexture, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(1)));
 
 		if(Globals.DEBUG)
 		{
@@ -49,5 +95,22 @@ class Planet extends DisplayObject
 			graphic.graphics.drawCircle(0, 0, 2500);
 			addNode(graphic);
 		}
+	}
+
+	function addDecoration(sprite:Sprite, angle:Float, offset:Float = 1196):Sprite
+	{
+		sprite.position = Vector2.RADIAN(angle, offset);
+		sprite.rotation = angle + MathHelper.toRadians(90);
+		sprite.pivot = new Vector2(0.5, 1);
+		sprite.anchor = new Vector2(0.5, 1);
+
+		return sprite;
+	}
+
+	override public function update(deltaTime:Float):Void
+	{
+		super.update(deltaTime);
+
+		clouds.rotation += milkshake.utils.MathHelper.toRadians(0.01);
 	}
 }
