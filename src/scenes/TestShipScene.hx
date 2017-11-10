@@ -168,12 +168,12 @@ class TestShipScene extends Scene
 		// }
 		
 
+		followCam.fixedRotation = (distance > 2000);
+
 		input.update(delta);
 
 		if(input.isDown(Key.P) && playerLaunched == false)
 		{
-			followCam.fixedRotation = false;//
-
 			addNode(player = new Player(space),
 			{
 				position: ship.position
@@ -190,6 +190,19 @@ class TestShipScene extends Scene
 		orbit.graphics.clear();
 
 		planetaryGravity(planets[0], 1 / 24);
+
+
+		if(player != null && Vector2.distance(player.position, ship.core.body.position.toVector2()) < 100)
+		{
+			if(playerLaunched == true && input.isDown(Key.O))
+			{
+				removeNode(player);
+
+				followCam.target = ship;
+				player = null;
+				playerLaunched = false;
+			}
+		}
 
 		for(planet in planets) {
 			

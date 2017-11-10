@@ -82,6 +82,11 @@ class Ship extends Entity
 		return super.set_rotation(value);
 	}
 
+	override function get_rotation():Float
+	{
+		return super.get_rotation() + milkshake.utils.MathHelper.toRadians(180);
+	}
+
 	override public function update(delta:Float):Void
 	{
 		//Update the x, y and rotation values for the node.
