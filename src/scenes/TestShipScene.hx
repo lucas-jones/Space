@@ -168,7 +168,7 @@ class TestShipScene extends Scene
 		// }
 		
 
-		followCam.fixedRotation = (distance > 2000);
+		followCam.fixedRotation = (distance > 2000 && player == null);
 
 		input.update(delta);
 
