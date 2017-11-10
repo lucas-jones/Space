@@ -54,7 +54,7 @@ class Engine extends ShipPart
 
 		if(input.isDown(Key.W))
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * speed)));
+			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * (input.isDown(Key.SHIFT) ? 10 : speed))));
 			emitter.visible = true;
 		}
 
