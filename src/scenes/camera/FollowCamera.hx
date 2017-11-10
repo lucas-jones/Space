@@ -16,10 +16,11 @@ class FollowCamera extends Camera
 		{
 			targetPosition.x = target.x;
 			targetPosition.y = target.y;
-			targetRotation = target.rotation;
+			targetRotation = MathHelper.lerp(targetRotation, target.rotation, 0.05);
 		}
 
-		targetZoom = MathHelper.lerp(targetZoom, zoom, 0.05);
+		targetZoom = MathHelper.lerp(targetZoom, zoom, 0.04);
+		
 
 		super.update(delta);
 	}

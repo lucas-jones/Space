@@ -28,6 +28,8 @@ import milkshake.components.input.Input;
 import milkshake.components.input.Key;
 import nape.geom.Geom;
 
+using utils.PhysicsUtils;
+
 class TestShipScene extends Scene
 {
 	private var ship:Ship;
@@ -35,7 +37,7 @@ class TestShipScene extends Scene
 	private var space:Space;
 
 	private var planetDisplay:Planet;
-	private var planet:Body;
+	private var planets:Array<Body>;
 	private var player:Player;
 
 	private var orbit:Graphics;
@@ -52,6 +54,8 @@ class TestShipScene extends Scene
 		space = new Space(new Vec2(0, 0));
 
 		input = new Input();
+
+		planets = [];
 	}
 	var sky:Graphics;
 	override public function create():Void
@@ -62,13 +66,14 @@ class TestShipScene extends Scene
 
 
 
-		addPlanet();
+		addPlanet(new Vector2(0, 3000));
+		addPlanet(new Vector2(0, -3000), true);
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
 		addNode(ship,
 		{
-			position: new Vector2(4800, -1000),
+			position: new Vector2(-2000, -3000),
 			anchor: Vector2.HALF
 		});
 
@@ -91,29 +96,34 @@ class TestShipScene extends Scene
 
 			addNode(graphic);
 			addNode(new PhysicsDebug(space));
-			addNode(orbit = new milkshake.core.Graphics());
+			
 			untyped window.ship = ship;
 		}
 
+		addNode(orbit = new milkshake.core.Graphics());
 	}
 
-	function addPlanet():Void
+	function addPlanet(position:Vector2, snow:Bool = false)
 	{
-		var grass = Texture.fromImage("assets/images/grass.png");
-		var dirt = Texture.fromImage("assets/images/dirt.png");
+		var grass = snow ? Texture.fromImage("assets/images/tundra.png") : Texture.fromImage("assets/images/grass.png");
+		var dirt = snow ? Texture.fromImage("assets/images/ice.png") : Texture.fromImage("assets/images/dirt.png");
 
-		addNode(new Planet(grass, dirt),
+		addNode(new Planet(grass, dirt, snow),
 		{
-			position: Globals.SCREEN_CENTER
+			position: position
 		});
-		planet = new Body(BodyType.KINEMATIC);
+
+		var planet = new Body(BodyType.KINEMATIC);
 		var planetShape = new Circle(1200);
-		var planetPos = new Vector2(Globals.SCREEN_CENTER.x, Globals.SCREEN_CENTER.y);
 		planet.shapes.add(planetShape);
 		planet.mass = 1;
 
-		planet.position = new nape.geom.Vec2(planetPos.x, planetPos.y);
+		planet.position = new nape.geom.Vec2(position.x, position.y);
 		space.bodies.add(planet);
+
+		planets.push(planet);
+
+		return planet;
 	}
 
 	function createShip():Ship
@@ -138,9 +148,25 @@ class TestShipScene extends Scene
 	{
 		super.update(delta);
 
-		var distance = Vector2.distance(new Vector2(planet.position.x, planet.position.y), followCam.target.position);
+		planets.sort(function(a:Body, b:Body)
+		{
+			var aValue = Vector2.distance(a.position.toVector2(), followCam.target.position);
+			var bValue = Vector2.distance(b.position.toVector2(), followCam.target.position);
 
-		sky.alpha = MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
+			return (aValue > bValue) ? 1 : -1;
+		});
+
+		
+
+		var distance = Vector2.distance(planets[0].position.toVector2(), followCam.target.position);
+		sky.alpha = 0;
+		// sky.alpha = MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
+	
+		// if(player == null)
+		// {
+			followCam.zoom = (distance > 2000) ? 0.25 : (player == null) ? 0.5 : 1;
+		// }
+		
 
 		input.update(delta);
 
@@ -159,58 +185,24 @@ class TestShipScene extends Scene
 			playerLaunched = true;
 		}
 
-		// var distance = Vector2.distance(Vector2.ZERO, ship.position);
-
-		// var inOrbit:Bool = false;
-		// if(distance > 1500 && distance < 2500)
-		// {
-		// 	// distance = 1800;
-		// 	inOrbit = true;
-
-		// 	var angle = Vector2.angle(Vector2.ZERO, ship.position);
-		// 	var targetAngle = angle + MathHelper.toRadians(2);
-
-		// 	if(!Engine.IN_USE)
-		// 	{
-		// 		var targetPosition = new Vector2(Math.cos(targetAngle) * (distance), Math.sin(targetAngle) * (distance));
-
-		// 		var targetVelocity = targetPosition.sub(new Vector2(ship.position.x, ship.position.y));
-
-		// 		ship.core.body.velocity.x = MathHelper.lerp(ship.core.body.velocity.x, targetVelocity.x, 0.1);
-		// 		ship.core.body.velocity.y = MathHelper.lerp(ship.core.body.velocity.y, targetVelocity.y, 0.1);
-
-		// 	}
-		// }
-
 		space.step(1 / 24);
 
-		planetaryGravity(planet, 1 / 24);
+		orbit.graphics.clear();
 
-		// if(Globals.DEBUG)
-		// {
-		// 	orbit.graphics.clear();
+		planetaryGravity(planets[0], 1 / 24);
 
-		// 	orbit.graphics.lineStyle(2, Color.White);
-		// 	orbit.graphics.drawCircle(0, 0, distance);
+		for(planet in planets) {
+			
 
-		// 	orbit.graphics.lineStyle(2, Color.Green);
+			orbit.graphics.lineStyle(2, Color.White);
+			// orbit.graphics.drawCircle(planet.position.x, planet.position.y, 2000);
 
-		// 	if(inOrbit)
-		// 	{
-		// 		orbit.graphics.clear();
-		// 		orbit.graphics.lineStyle(2, Color.White);
-		// 		orbit.graphics.drawCircle(0, 0, distance);
-
-		// 		orbit.graphics.lineStyle(10, Color.Green);
-
-		// 		if(inOrbit)
-		// 		{
-		// 			untyped debugger;
-		// 			orbit.graphics.moveTo(0, 0);
-		// 			orbit.graphics.lineTo(ship.position.x, ship.position.y);
-		// 		}
-		// 	}
-		// }
+			if(distance > 2000)
+			{
+				orbit.graphics.moveTo(planet.position.x, planet.position.y);
+				orbit.graphics.lineTo(followCam.target.x, followCam.target.y);
+			}
+		}
 	}
 
 	private function planetaryGravity(planet:Body, deltaTime:Float):Void
@@ -231,6 +223,8 @@ class TestShipScene extends Scene
 			for(body in space.liveBodies)
 			{
 				// Find closest points between bodies.
+
+
 
 				var distance:Float = Geom.distanceBody(planet, body, closestA, closestB);
 

@@ -56,7 +56,7 @@ class Joint
 		weld.stiff = true;
 		weld.breakUnderForce = true;
 		weld.removeOnBreak = true;
-		weld.maxForce = 20000;
+		weld.maxForce = 100000;
 		part.body.space.constraints.add(weld);
 
 		onConnected.dispatch(this);

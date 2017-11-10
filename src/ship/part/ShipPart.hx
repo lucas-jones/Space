@@ -32,6 +32,7 @@ class ShipPart extends DisplayObject
 
 		this.type = type;
 		this.body = new Body(BodyType.DYNAMIC);
+		this.body.mass = 2;
 		this.joints = new Map();
 		if(joints != null) joints.iter(addJoint);
 	}

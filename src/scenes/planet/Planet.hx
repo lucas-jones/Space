@@ -30,6 +30,16 @@ class Planet extends DisplayObject
 		"assets/images/backgrounds/tree21.png"
 	];
 
+	public static var SNOW_TREE_ASSETS = [
+		"assets/images/backgrounds/tree04.png",
+		"assets/images/backgrounds/tree6.png",
+		"assets/images/backgrounds/tree12.png",
+		"assets/images/backgrounds/tree15.png",
+		"assets/images/backgrounds/tree29.png",
+		"assets/images/backgrounds/tree33.png",
+		"assets/images/backgrounds/tree35.png",
+	];
+
 	public static var CLOUD_ASSETS = [
 		"assets/images/backgrounds/cloud1.png",
 		"assets/images/backgrounds/cloud2.png",
@@ -57,13 +67,19 @@ class Planet extends DisplayObject
 
 	var clouds:DisplayObject;
 
-	public function new(crustTexture:Texture, coreTexture:Texture)
+	var sky:scenes.planet.PlanetSky;
+	var sun:scenes.planet.PlanetSky;
+
+	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true)
 	{
 		super();
 
+		addNode(sky = new scenes.planet.PlanetSky("assets/images/sky.png"));
+		addNode(sun = new scenes.planet.PlanetSky("assets/images/sky_set3.png"));
+
 		for(x in 0 ... 40)
 		{
-			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(TREE_ASSETS))), Random.float(0, 360)));
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(snow ? SNOW_TREE_ASSETS : TREE_ASSETS))), Random.float(0, 360)));
 		}
 
 		for(x in 0 ... 20)
@@ -95,20 +111,20 @@ class Planet extends DisplayObject
 		var coreVerts = crust.generateUnderbelly([]);
 		addNode(corePolygon = new SmartPolygon(coreTexture, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(1)));
 
-		if(Globals.DEBUG)
-		{
-			var graphic = new milkshake.core.Graphics();
-			graphic.graphics.lineStyle(2, Color.Red, 1);
-			graphic.graphics.beginFill(0xFF0000, 0.2);
-			graphic.graphics.drawCircle(0, 0, 1500);
-			addNode(graphic);
+		// if(Globals.DEBUG)
+		// {
+		// 	var graphic = new milkshake.core.Graphics();
+		// 	graphic.graphics.lineStyle(2, Color.Red, 1);
+		// 	graphic.graphics.beginFill(0xFF0000, 0.2);
+		// 	graphic.graphics.drawCircle(0, 0, 1500);
+		// 	addNode(graphic);
 
-			var graphic = new milkshake.core.Graphics();
-			graphic.graphics.lineStyle(2, 0xffa500, 1);
-			graphic.graphics.beginFill(0xffa500, 0.2);
-			graphic.graphics.drawCircle(0, 0, 2500);
-			addNode(graphic);
-		}
+		// 	var graphic = new milkshake.core.Graphics();
+		// 	graphic.graphics.lineStyle(2, 0xffa500, 1);
+		// 	graphic.graphics.beginFill(0xffa500, 0.2);
+		// 	graphic.graphics.drawCircle(0, 0, 2500);
+		// 	addNode(graphic);
+		// }
 	}
 
 	function addDecoration(sprite:Sprite, angle:Float, offset:Float = 1196):Sprite
@@ -120,10 +136,17 @@ class Planet extends DisplayObject
 
 		return sprite;
 	}
-
+	var time:Float = 0;
 	override public function update(deltaTime:Float):Void
 	{
 		super.update(deltaTime);
+
+		time += deltaTime;
+
+		sky.alpha = 1 + Math.sin(time / 2000);
+		sun.alpha = 1 - (1 + Math.sin(time / 2000));
+		// trace(time + " " + sky.alpha);
+		// sun.alpha = 0;//Math.cos(deltaTime) + 0.5;
 
 		clouds.rotation += milkshake.utils.MathHelper.toRadians(0.01);
 	}
