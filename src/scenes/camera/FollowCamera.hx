@@ -21,7 +21,7 @@ class FollowCamera extends Camera
 
 			if(!fixedRotation || ALWAYS_ROT)
 			{
-				targetRotation = MathHelper.lerpAngle(targetRotation, MathHelper.unwrapRadian(target.rotation), 0.05);
+				targetRotation = MathHelper.unwrapRadian(MathHelper.lerpAngle(targetRotation, MathHelper.unwrapRadian(target.rotation), 0.05));
 			}
 		}
 
