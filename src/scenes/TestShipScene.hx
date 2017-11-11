@@ -166,7 +166,7 @@ class TestShipScene extends Scene
 			var shape:Circle = cast planets[0].shapes.at(0);
 
 			followCam.zoom = (distance > shape.radius + 700) ? 0.25 : (player == null) ? 0.5 : 1;
-			if(input.isDown(Key.M)) followCam.zoom = 0.05;
+			if(milk.input.isDown(Key.M)) followCam.zoom = 0.05;
 		// }
 
 		followCam.fixedRotation = (distance > 2000 && player == null);
