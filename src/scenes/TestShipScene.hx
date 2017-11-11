@@ -27,6 +27,7 @@ import milkshake.game.scene.Scene;
 import milkshake.components.input.Input;
 import milkshake.components.input.Key;
 import nape.geom.Geom;
+import milkshake.Milkshake;
 
 using utils.PhysicsUtils;
 
@@ -44,6 +45,8 @@ class TestShipScene extends Scene
 
 	private var input:Input;
 
+	var sky:Graphics;
+
 	public function new()
 	{
 		super("TestShipScene", [ "assets/images/dino/stars.png", SpriteSheets.SHIPPARTS, SpriteSheets.LASERS, SpriteSheets.PLAYER], SpaceCameraPresets.FOLLOW, Color.Blue);
@@ -53,11 +56,11 @@ class TestShipScene extends Scene
 
 		space = new Space(new Vec2(0, 0));
 
-		input = new Input();
+		input = Milkshake.getInstance().input;
 
 		planets = [];
 	}
-	var sky:Graphics;
+	
 	override public function create():Void
 	{
 		addNode(new Background(Texture.fromImage("assets/images/backgrounds/darkPurple.png")));
@@ -68,6 +71,7 @@ class TestShipScene extends Scene
 
 		addPlanet(new Vector2(0, 3000));
 		addPlanet(new Vector2(0, -3000), true);
+		addPlanet(new Vector2(-7000, -300));
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
@@ -103,18 +107,18 @@ class TestShipScene extends Scene
 		addNode(orbit = new milkshake.core.Graphics());
 	}
 
-	function addPlanet(position:Vector2, snow:Bool = false)
+	function addPlanet(position:Vector2, snow:Bool = false, size:Float = 1200)
 	{
 		var grass = snow ? Texture.fromImage("assets/images/tundra.png") : Texture.fromImage("assets/images/grass.png");
 		var dirt = snow ? Texture.fromImage("assets/images/ice.png") : Texture.fromImage("assets/images/dirt.png");
 
-		addNode(new Planet(grass, dirt, snow),
+		addNode(new Planet(grass, dirt, snow, size),
 		{
 			position: position
 		});
 
 		var planet = new Body(BodyType.KINEMATIC);
-		var planetShape = new Circle(1200);
+		var planetShape = new Circle(size);
 		planet.shapes.add(planetShape);
 		planet.mass = 1;
 
@@ -143,7 +147,7 @@ class TestShipScene extends Scene
 
 		return ship;
 	}
-	var playerLaunched:Bool = false;
+	
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
@@ -165,24 +169,22 @@ class TestShipScene extends Scene
 		// if(player == null)
 		// {
 			followCam.zoom = (distance > 2000) ? 0.25 : (player == null) ? 0.5 : 1;
+			if(input.isDown(Key.M)) followCam.zoom = 0.05;
 		// }
 		
 
 		followCam.fixedRotation = (distance > 2000 && player == null);
+		// trace(ship.core.rotation);
 
-		input.update(delta);
-
-		if(input.isDown(Key.P) && playerLaunched == false)
+		if(input.isDownOnce(Key.P) && player == null)
 		{
 			addNode(player = new Player(space),
 			{
-				position: ship.position
+				position: ship.position.add(new Vector2(150, 0))
 			});
 
 			followCam.target = player;
 			followCam.zoom = 1.5;
-
-			playerLaunched = true;
 		}
 
 		space.step(1 / 24);
@@ -194,13 +196,12 @@ class TestShipScene extends Scene
 
 		if(player != null && Vector2.distance(player.position, ship.core.body.position.toVector2()) < 100)
 		{
-			if(playerLaunched == true && input.isDown(Key.O))
+			if(player != null && input.isDownOnce(Key.O))
 			{
 				removeNode(player);
 
 				followCam.target = ship;
 				player = null;
-				playerLaunched = false;
 			}
 		}
 

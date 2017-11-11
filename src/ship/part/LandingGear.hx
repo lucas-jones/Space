@@ -6,20 +6,17 @@ import milkshake.core.Sprite;
 import nape.phys.BodyType;
 import pixi.core.textures.Texture;
 import haxe.Timer;
-import milkshake.components.input.Input;
 import milkshake.math.Vector2;
 import ship.part.joint.Joint;
 import nape.shape.Polygon;
 import nape.geom.Vec2;
 import milkshake.core.Graphics;
 import milkshake.utils.Color;
-import nape.constraint.WeldJoint;
 
 class LandingGear extends ShipPart
 {
 	public static inline var TOP_JOINT:String = 'top';
 
-	private var input:Input;
 	private var graphic:milkshake.core.Graphics;
 
 	public function new(?id:String)
@@ -39,18 +36,13 @@ class LandingGear extends ShipPart
 
 		graphic = new milkshake.core.Graphics();
 
-		// X
-		
 		Timer.delay(() -> {
 			parent.addNode(graphic);
 		}, 100);
-
-		input = new Input();
 	}
 
 	override public function update(delta:Float):Void
 	{
-		input.update(delta);
 		var rotation = body.rotation - (Math.PI / 2);
 		var x = Math.cos(rotation) * 20;
 		var y = Math.sin(rotation) * 20;
@@ -64,7 +56,7 @@ class LandingGear extends ShipPart
 		var _ray = body.space.rayCast(ray);
 		this.alpha = _ray != null ? 1 : 0.2;
 
-		if(input.isDown(Key.G))
+		if(milkshake.Milkshake.getInstance().input.isDownOnce(Key.G))
 		{
 			if(_ray != null)
 			{

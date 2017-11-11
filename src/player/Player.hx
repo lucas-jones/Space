@@ -16,6 +16,7 @@ import pixi.core.textures.Texture;
 import milkshake.core.Sprite;
 import milkshake.core.DisplayObject;
 import milkshake.utils.Color;
+import milkshake.Milkshake;
 
 class Player extends DisplayObject
 {
@@ -29,7 +30,8 @@ class Player extends DisplayObject
 	public function new(space:Space)
 	{
 		super('player');
-		input = new Input();
+		
+		input = Milkshake.getInstance().input;
 
 		addNode(emitter = ParticlePresets.FIRE,
 		{
@@ -48,10 +50,6 @@ class Player extends DisplayObject
 		body.shapes.add(new Circle(10));
 		body.mass = 0.3;
 		space.bodies.add(body);
-
-		body.allowRotation = false;
-
-		untyped window.body = body;
 
 		if(milkshake.utils.Globals.DEBUG)
 		{
@@ -91,8 +89,6 @@ class Player extends DisplayObject
 	override public function update(deltaTime:Float):Void
 	{
 		emitter.visible = false;
-
-		input.update(deltaTime);
 
 		if(input.isDown(Key.SPACEBAR) || input.isDown(Key.W))
 		{

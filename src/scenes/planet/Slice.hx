@@ -16,12 +16,19 @@ class Slice
 	public var isSliced(default, null):Bool;
 	public var splits(default, null):Int;
 
-	public function new(?parent:Slice, minX:Float = 0, maxX:Float = 360)
+	public var height(default, null):Float;
+	public var crustHeight(default, null):Float;
+	
+
+	public function new(?parent:Slice, minX:Float = 0, maxX:Float = 360, height:Float = 1200, crustHeight:Float = 50)
 	{
 		this.parent = parent;
 
 		this.minX = minX;
 		this.maxX = maxX;
+
+		this.height = height;
+		this.crustHeight = crustHeight;
 
 		this.isSliced = false;
 		this.splits = 0;
@@ -37,8 +44,8 @@ class Slice
 		else
 		{
 			var width = maxX - minX;			
-			childA = new Slice(this, minX, minX + (width / 2));
-			childB = new Slice(this, minX + (width / 2), maxX);
+			childA = new Slice(this, minX, minX + (width / 2), height, crustHeight);
+			childB = new Slice(this, minX + (width / 2), maxX, height, crustHeight);
 
 			isSliced = true;			
 		}
@@ -81,9 +88,9 @@ class Slice
 			//left = TestScene.perlin.noise2d(minX / 40, 0, 1, 3, 0) * 30;
 			//right = TestScene.perlin.noise2d(maxX / 40, 0, 1, 3, 0) * 30;
 
-			var lower = 1150;
-			var topLeft = new Vector2(Math.cos(MathHelper.toRadians(minX)) * (1200 + left), Math.sin(MathHelper.toRadians(minX)) * (1200 + left));
-			var topRight = new Vector2(Math.cos(MathHelper.toRadians(maxX)) * (1200 + right), Math.sin(MathHelper.toRadians(maxX)) * (1200 + right));
+			var lower = height - crustHeight;
+			var topLeft = new Vector2(Math.cos(MathHelper.toRadians(minX)) * (height + left), Math.sin(MathHelper.toRadians(minX)) * (height + left));
+			var topRight = new Vector2(Math.cos(MathHelper.toRadians(maxX)) * (height + right), Math.sin(MathHelper.toRadians(maxX)) * (height + right));
 			var bottomRight = new Vector2(Math.cos(MathHelper.toRadians(maxX)) * (lower + right), Math.sin(MathHelper.toRadians(maxX)) * (lower + right));
 			var bottomLeft = new Vector2(Math.cos(MathHelper.toRadians(minX)) * (lower + left), Math.sin(MathHelper.toRadians(minX)) * (lower + left));
 
@@ -114,7 +121,7 @@ class Slice
 			// left = TestScene.perlin.noise2d(minX / 40, 0, 1, 3, 0) * 30;
 			// right = TestScene.perlin.noise2d(maxX / 40, 0, 1, 3, 0) * 30;
 
-			var lower = 1150;
+			var lower = height - crustHeight;
 			var bottomRight = new Vector2(Math.cos(MathHelper.toRadians(maxX)) * (lower + right), Math.sin(MathHelper.toRadians(maxX)) * (lower + right));
 			var bottomLeft = new Vector2(Math.cos(MathHelper.toRadians(minX)) * (lower + left), Math.sin(MathHelper.toRadians(minX)) * (lower + left));
 			

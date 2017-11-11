@@ -70,9 +70,13 @@ class Planet extends DisplayObject
 	var sky:scenes.planet.PlanetSky;
 	var sun:scenes.planet.PlanetSky;
 
-	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true)
+	var size:Float;
+
+	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true, size:Float = 200)
 	{
 		super();
+
+		this.size = size;
 
 		addNode(sky = new scenes.planet.PlanetSky("assets/images/sky.png"));
 		addNode(sun = new scenes.planet.PlanetSky("assets/images/sky_set3.png"));
@@ -94,7 +98,7 @@ class Planet extends DisplayObject
 			clouds.addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(CLOUD_ASSETS))), Random.float(0, 360), 1700));
 		}
 
-		crust = new Slice();
+		crust = new Slice(null, 0, 360, size);
 
 		crust.slice();
 		crust.slice();
@@ -129,7 +133,7 @@ class Planet extends DisplayObject
 
 	function addDecoration(sprite:Sprite, angle:Float, offset:Float = 1196):Sprite
 	{
-		sprite.position = Vector2.RADIAN(angle, offset);
+		sprite.position = Vector2.RADIAN(angle, size);
 		sprite.rotation = angle + MathHelper.toRadians(90);
 		sprite.pivot = new Vector2(0.5, 1);
 		sprite.anchor = new Vector2(0.5, 1);
