@@ -72,7 +72,7 @@ class Planet extends DisplayObject
 
 	var size:Float;
 
-	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true, size:Float = 200)
+	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true, size:Float = 1200)
 	{
 		super();
 
@@ -88,14 +88,14 @@ class Planet extends DisplayObject
 
 		for(x in 0 ... 20)
 		{
-			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(GRASS_ASSETS))), Random.float(0, 360)));
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(GRASS_ASSETS))), Random.float(0, 360)), size - 5);
 		}
 
 		addNode(clouds = new DisplayObject());
 		
 		for(x in 0 ... 20)
 		{
-			clouds.addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(CLOUD_ASSETS))), Random.float(0, 360), 1700));
+			clouds.addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(CLOUD_ASSETS))), Random.float(0, 360), size + 500));
 		}
 
 		crust = new Slice(null, 0, 360, size);
@@ -133,7 +133,7 @@ class Planet extends DisplayObject
 
 	function addDecoration(sprite:Sprite, angle:Float, offset:Float = 1196):Sprite
 	{
-		sprite.position = Vector2.RADIAN(angle, size);
+		sprite.position = Vector2.RADIAN(angle, offset);
 		sprite.rotation = angle + MathHelper.toRadians(90);
 		sprite.pivot = new Vector2(0.5, 1);
 		sprite.anchor = new Vector2(0.5, 1);
