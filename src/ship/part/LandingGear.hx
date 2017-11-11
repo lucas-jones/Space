@@ -29,12 +29,14 @@ class LandingGear extends ShipPart
 		var texture = Texture.fromFrame('beamLong1.png');
 		addNode(new Sprite(texture), { anchor: new Vector2(0.5, 0.5), position: new Vector2(-20, 0) });
 		addNode(new Sprite(texture), { anchor: new Vector2(0.5, 0.5), position: new Vector2(20, 0), scale: new Vector2(-1, 1) });
-		
+
 		addShape(new Polygon(Polygon.box(50, 10)));
 
 		body.type = nape.phys.BodyType.DYNAMIC;
 
 		graphic = new milkshake.core.Graphics();
+
+		// X
 
 		Timer.delay(() -> {
 			parent.addNode(graphic);
@@ -56,7 +58,7 @@ class LandingGear extends ShipPart
 		var _ray = body.space.rayCast(ray);
 		this.alpha = _ray != null ? 1 : 0.2;
 
-		if(milkshake.Milkshake.getInstance().input.isDownOnce(Key.G))
+		if(milk.input.isDownOnce(Key.G))
 		{
 			if(_ray != null)
 			{

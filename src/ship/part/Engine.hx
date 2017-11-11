@@ -7,7 +7,6 @@ import scenes.particle.ParticlePresets;
 import milkshake.utils.MathHelper;
 import milkshake.core.ParticleEmitter;
 import nape.geom.Vec2;
-import milkshake.components.input.Input;
 import milkshake.math.Vector2;
 import ship.part.joint.Joint;
 import pixi.core.textures.Texture;
@@ -21,8 +20,6 @@ class Engine extends ShipPart
 
 	public var speed:Float = 10;
 
-	private var input:Input;
-
 	private var emitter:ParticleEmitter;
 
 	public function new(?id:String)
@@ -32,8 +29,6 @@ class Engine extends ShipPart
 			new Joint(TOP_JOINT, new Vector2(0, -14)),
 			new Joint(BOTTOM_JOINT, new Vector2(0, 14))
 		]);
-
-		input = new Input();
 
 		addNode(emitter = ParticlePresets.FIRE,
 		{
@@ -50,27 +45,25 @@ class Engine extends ShipPart
 	{
 		emitter.visible = false;
 
-		input.update(delta);
-
-		if(input.isDown(Key.W))
+		if(milk.input.isDown(Key.W))
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * (input.isDown(Key.SHIFT) ? 10 : speed))));
+			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * (milk.input.isDown(Key.SHIFT) ? 10 : speed))));
 			emitter.visible = true;
 		}
 
-		emitter.scale.x = (input.isDown(Key.SHIFT)) ? 2 : 1;
+		emitter.scale.x = (milk.input.isDown(Key.SHIFT)) ? 2 : 1;
 
-		if(input.isDown(Key.S))
+		if(milk.input.isDown(Key.S))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1 * speed)));
 		}
 
-		if(input.isDown(Key.Q))
+		if(milk.input.isDown(Key.Q))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(1 * speed, 0)));
 		}
 
-		if(input.isDown(Key.E))
+		if(milk.input.isDown(Key.E))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(-1 * speed, 0)));
 		}
@@ -78,14 +71,14 @@ class Engine extends ShipPart
 		sprite.rotation = 0;
 		emitter.rotation = MathHelper.toRadians(270);
 
-		if(input.isDown(Key.A))
+		if(milk.input.isDown(Key.A))
 		{
 			body.applyAngularImpulse(-50 * speed);
 			emitter.rotation = MathHelper.toRadians(270 + 20);
 			sprite.rotation = MathHelper.toRadians(10);
 		}
 
-		if(input.isDown(Key.D))
+		if(milk.input.isDown(Key.D))
 		{
 			body.applyAngularImpulse(50 * speed);
 			emitter.rotation = MathHelper.toRadians(270 - 20);
@@ -93,7 +86,7 @@ class Engine extends ShipPart
 		}
 
 		IN_USE = emitter.visible;
-		
+
 		emitter.update(delta);
 
 		super.update(delta);
