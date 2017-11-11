@@ -24,7 +24,7 @@ import pixi.core.textures.Texture;
 import milkshake.assets.SpriteSheets;
 import milkshake.utils.Color;
 import milkshake.game.scene.Scene;
-import milkshake.components.input.Input;
+import milkshake.Milkshake;
 import milkshake.components.input.Key;
 import nape.geom.Geom;
 import milkshake.Milkshake;
@@ -43,8 +43,6 @@ class TestShipScene extends Scene
 
 	private var orbit:Graphics;
 
-	private var input:Input;
-
 	var sky:Graphics;
 
 	public function new()
@@ -56,18 +54,14 @@ class TestShipScene extends Scene
 
 		space = new Space(new Vec2(0, 0));
 
-		input = Milkshake.getInstance().input;
-
 		planets = [];
 	}
-	
+
 	override public function create():Void
 	{
 		addNode(new Background(Texture.fromImage("assets/images/backgrounds/darkPurple.png")));
 
 		addNode(sky = milkshake.utils.GraphicsHelper.generateRectangle(100000, 100000, Color.SkyBlue, true));
-
-
 
 		addPlanet(new Vector2(0, 3000));
 		addPlanet(new Vector2(0, -3000), true);
@@ -100,7 +94,7 @@ class TestShipScene extends Scene
 
 			addNode(graphic);
 			addNode(new PhysicsDebug(space));
-			
+
 			untyped window.ship = ship;
 		}
 
@@ -147,7 +141,7 @@ class TestShipScene extends Scene
 
 		return ship;
 	}
-	
+
 	override public function update(delta:Float):Void
 	{
 		super.update(delta);
@@ -160,31 +154,43 @@ class TestShipScene extends Scene
 			return (aValue > bValue) ? 1 : -1;
 		});
 
-		
+
 
 		var distance = Vector2.distance(planets[0].position.toVector2(), followCam.target.position);
 		sky.alpha = 0;
 		// sky.alpha = MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
-	
+
 		// if(player == null)
 		// {
 			followCam.zoom = (distance > 2000) ? 0.25 : (player == null) ? 0.5 : 1;
-			if(input.isDown(Key.M)) followCam.zoom = 0.05;
+			if(milk.input.isDown(Key.M)) followCam.zoom = 0.05;
 		// }
-		
 
 		followCam.fixedRotation = (distance > 2000 && player == null);
 		// trace(ship.core.rotation);
 
-		if(input.isDownOnce(Key.P) && player == null)
+		if(milk.input.isDownOnce(Key.P))
 		{
-			addNode(player = new Player(space),
+			if(player != null)
 			{
-				position: ship.position.add(new Vector2(150, 0))
-			});
+				if(Vector2.distance(player.position, ship.core.body.position.toVector2()) < 100)
+				{
+					followCam.target = ship;
+					followCam.zoom = 0.5;
+					removeNode(player);
+					player = null;
+				}
+			}
+			else
+			{
+				addNode(player = new Player(space),
+				{
+					position: ship.position.add(new Vector2(150, 0))
+				});
 
-			followCam.target = player;
-			followCam.zoom = 1.5;
+				followCam.target = player;
+				followCam.zoom = 1.5;
+			}
 		}
 
 		space.step(1 / 24);
@@ -193,21 +199,7 @@ class TestShipScene extends Scene
 
 		planetaryGravity(planets[0], 1 / 24);
 
-
-		if(player != null && Vector2.distance(player.position, ship.core.body.position.toVector2()) < 100)
-		{
-			if(player != null && input.isDownOnce(Key.O))
-			{
-				removeNode(player);
-
-				followCam.target = ship;
-				player = null;
-			}
-		}
-
 		for(planet in planets) {
-			
-
 			orbit.graphics.lineStyle(2, Color.White);
 			// orbit.graphics.drawCircle(planet.position.x, planet.position.y, 2000);
 

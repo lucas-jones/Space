@@ -8,7 +8,6 @@ import nape.phys.BodyType;
 import nape.geom.Vec2;
 import milkshake.math.Vector2;
 import milkshake.components.input.Key;
-import milkshake.components.input.Input;
 import scenes.particle.ParticlePresets;
 import milkshake.core.ParticleEmitter;
 import milkshake.utils.MathHelper;
@@ -24,14 +23,11 @@ class Player extends DisplayObject
 
 	var sprite:Sprite;
 	var texture:Texture;
-	var input:Input;
 	var emitter:ParticleEmitter;
 
 	public function new(space:Space)
 	{
 		super('player');
-		
-		input = Milkshake.getInstance().input;
 
 		addNode(emitter = ParticlePresets.FIRE,
 		{
@@ -90,25 +86,25 @@ class Player extends DisplayObject
 	{
 		emitter.visible = false;
 
-		if(input.isDown(Key.SPACEBAR) || input.isDown(Key.W))
+		if(milk.input.isDown(Key.SPACEBAR) || milk.input.isDown(Key.W))
 		{
 			emitter.visible = true;
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1)));
 		}
 
-		if(input.isDown(Key.D))
+		if(milk.input.isDown(Key.D))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(1, 0)));
 			scale.x = Math.abs(scale.x);
 		}
 
-		if(input.isDown(Key.A))
+		if(milk.input.isDown(Key.A))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(-1, 0)));
 			scale.x = -Math.abs(scale.x);
 		}
 
-		if(input.isDown(Key.S))
+		if(milk.input.isDown(Key.S))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1)));
 		}

@@ -4,7 +4,6 @@ import milkshake.math.GUID;
 import milkshake.core.Sprite;
 import pixi.core.textures.Texture;
 import haxe.Timer;
-import milkshake.components.input.Input;
 import milkshake.math.Vector2;
 import ship.part.joint.Joint;
 
@@ -13,8 +12,6 @@ class Gun extends ShipPart
 	public static inline var TOP_JOINT:String = 'gun_top';
 	public static inline var BOTTOM_JOINT_LEFT:String = 'gun_bottom_left';
 	public static inline var BOTTOM_JOINT_RIGHT:String = 'gun_bottom_right';
-
-	private var input:Input;
 
 	private var bullets:Array<Bullet>;
 
@@ -31,14 +28,13 @@ class Gun extends ShipPart
 		addNode(sprite = new Sprite(texture), { anchor: new Vector2(0.5, 0.5) });
 		addShapeFromTexture(texture);
 
-		input = new Input();
 		bullets = [];
 	}
 
 	private function createBullet():Void
 	{
 		var bullet = new Bullet();
-		
+
 		parent.addNode(bullet,
 		{
 			position: new Vector2(body.position.x, body.position.y),
@@ -56,9 +52,7 @@ class Gun extends ShipPart
 
 	override public function update(delta:Float):Void
 	{
-		input.update(delta);
-		
-		if(input.isDown(32))
+		if(milk.input.isDown(32))
 		{
 			createBullet();
 		}

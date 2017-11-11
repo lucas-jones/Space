@@ -2,15 +2,9 @@ package ship.part;
 
 import milkshake.math.GUID;
 import milkshake.components.input.Key;
-import milkshake.core.Sprite;
-import scenes.particle.ParticlePresets;
-import milkshake.utils.MathHelper;
-import milkshake.core.ParticleEmitter;
 import nape.geom.Vec2;
-import milkshake.components.input.Input;
 import milkshake.math.Vector2;
 import ship.part.joint.Joint;
-import pixi.core.textures.Texture;
 import nape.shape.Circle;
 import nape.phys.BodyType;
 import nape.phys.Body;
@@ -22,7 +16,6 @@ class Wheel extends ShipPart
 
 	public var speed:Float = 10;
 
-	private var input:Input;
     var wheel:Body;
 	public function new(?id:String)
 	{
@@ -31,10 +24,9 @@ class Wheel extends ShipPart
 			new Joint(TOP_JOINT, new Vector2(-30, -30))
 		]);
 
-		input = new Input();
         wheel = new Body(BodyType.DYNAMIC);
         wheel.shapes.add(new Circle(20));
-        
+
         addShape(new Polygon(Polygon.box(10, 10)));
 
         haxe.Timer.delay(() ->
@@ -47,9 +39,7 @@ class Wheel extends ShipPart
 
 	override public function update(delta:Float):Void
 	{
-		input.update(delta);
-
-		if(input.isDown(Key.D))
+		if(milk.input.isDown(Key.D))
 		{
 			wheel.applyAngularImpulse(50 * speed);
 		}
