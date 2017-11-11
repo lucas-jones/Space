@@ -58,6 +58,8 @@ class Engine extends ShipPart
 			emitter.visible = true;
 		}
 
+		emitter.scale.x = (input.isDown(Key.SHIFT)) ? 2 : 1;
+
 		if(input.isDown(Key.S))
 		{
 			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1 * speed)));
@@ -73,14 +75,21 @@ class Engine extends ShipPart
 			body.applyImpulse(body.localVectorToWorld(new Vec2(-1 * speed, 0)));
 		}
 
+		sprite.rotation = 0;
+		emitter.rotation = MathHelper.toRadians(270);
+
 		if(input.isDown(Key.A))
 		{
 			body.applyAngularImpulse(-50 * speed);
+			emitter.rotation = MathHelper.toRadians(270 + 20);
+			sprite.rotation = MathHelper.toRadians(10);
 		}
 
 		if(input.isDown(Key.D))
 		{
 			body.applyAngularImpulse(50 * speed);
+			emitter.rotation = MathHelper.toRadians(270 - 20);
+			sprite.rotation = MathHelper.toRadians(-10);
 		}
 
 		IN_USE = emitter.visible;
