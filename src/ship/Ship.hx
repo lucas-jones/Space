@@ -47,6 +47,11 @@ class Ship extends Entity
 		addPart(core);
 	}
 
+	public function setActive(active:Bool)
+	{
+		for(part in parts) part.active = active;
+	}
+
 	public function addPart(newPart:ShipPart, ?newPartJoint:Joint, ?shipJoint:Joint):Void
 	{
 		displayObject.addNode(newPart);

@@ -39,9 +39,12 @@ class Wheel extends ShipPart
 
 	override public function update(delta:Float):Void
 	{
-		if(milk.input.isDown(Key.D))
+		if(active)
 		{
-			wheel.applyAngularImpulse(50 * speed);
+			if(milk.input.isDown(Key.D))
+			{
+				wheel.applyAngularImpulse(50 * speed);
+			}
 		}
 
 		super.update(delta);

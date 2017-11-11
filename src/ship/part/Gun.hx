@@ -52,9 +52,12 @@ class Gun extends ShipPart
 
 	override public function update(delta:Float):Void
 	{
-		if(milk.input.isDown(32))
+		if(active)
 		{
-			createBullet();
+			if(milk.input.isDown(32))
+			{
+				createBullet();
+			}
 		}
 
 		super.update(delta);

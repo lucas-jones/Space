@@ -58,21 +58,24 @@ class LandingGear extends ShipPart
 		var _ray = body.space.rayCast(ray);
 		this.alpha = _ray != null ? 1 : 0.2;
 
-		if(milk.input.isDownOnce(Key.G))
+		if(active)
 		{
-			if(_ray != null)
+			if(milk.input.isDownOnce(Key.G))
 			{
-				trace("Weld");
-				body.type = body.type == BodyType.STATIC ? BodyType.DYNAMIC : BodyType.STATIC;
-				// var weld = new WeldJoint(body, _ray.shape.body,
-				// new Vec2(0, 0),
-				// new Vec2(body.position.x + x, body.position.y + y ), 0);
+				if(_ray != null)
+				{
+					trace("Weld");
+					body.type = body.type == BodyType.STATIC ? BodyType.DYNAMIC : BodyType.STATIC;
+					// var weld = new WeldJoint(body, _ray.shape.body,
+					// new Vec2(0, 0),
+					// new Vec2(body.position.x + x, body.position.y + y ), 0);
 
-				// weld.stiff = true;
-				// weld.breakUnderForce = true;
-				// weld.removeOnBreak = true;
-				// weld.maxForce = 20000;
-				// body.space.constraints.add(weld);
+					// weld.stiff = true;
+					// weld.breakUnderForce = true;
+					// weld.removeOnBreak = true;
+					// weld.maxForce = 20000;
+					// body.space.constraints.add(weld);
+				}
 			}
 		}
 

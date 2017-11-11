@@ -45,44 +45,47 @@ class Engine extends ShipPart
 	{
 		emitter.visible = false;
 
-		if(milk.input.isDown(Key.W))
+		if(active)
 		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * (milk.input.isDown(Key.SHIFT) ? 10 : speed))));
-			emitter.visible = true;
-		}
+			if(milk.input.isDown(Key.W))
+			{
+				body.applyImpulse(body.localVectorToWorld(new Vec2(0, 1 * (milk.input.isDown(Key.SHIFT) ? 10 : speed))));
+				emitter.visible = true;
+			}
 
-		emitter.scale.x = (milk.input.isDown(Key.SHIFT)) ? 2 : 1;
+			emitter.scale.x = (milk.input.isDown(Key.SHIFT)) ? 2 : 1;
 
-		if(milk.input.isDown(Key.S))
-		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1 * speed)));
-		}
+			if(milk.input.isDown(Key.S))
+			{
+				body.applyImpulse(body.localVectorToWorld(new Vec2(0, -1 * speed)));
+			}
 
-		if(milk.input.isDown(Key.Q))
-		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(1 * speed, 0)));
-		}
+			if(milk.input.isDown(Key.Q))
+			{
+				body.applyImpulse(body.localVectorToWorld(new Vec2(1 * speed, 0)));
+			}
 
-		if(milk.input.isDown(Key.E))
-		{
-			body.applyImpulse(body.localVectorToWorld(new Vec2(-1 * speed, 0)));
-		}
+			if(milk.input.isDown(Key.E))
+			{
+				body.applyImpulse(body.localVectorToWorld(new Vec2(-1 * speed, 0)));
+			}
 
-		sprite.rotation = 0;
-		emitter.rotation = MathHelper.toRadians(270);
+			sprite.rotation = 0;
+			emitter.rotation = MathHelper.toRadians(270);
 
-		if(milk.input.isDown(Key.A))
-		{
-			body.applyAngularImpulse(-50 * speed);
-			emitter.rotation = MathHelper.toRadians(270 + 20);
-			sprite.rotation = MathHelper.toRadians(10);
-		}
+			if(milk.input.isDown(Key.A))
+			{
+				body.applyAngularImpulse(-50 * speed);
+				emitter.rotation = MathHelper.toRadians(270 + 20);
+				sprite.rotation = MathHelper.toRadians(10);
+			}
 
-		if(milk.input.isDown(Key.D))
-		{
-			body.applyAngularImpulse(50 * speed);
-			emitter.rotation = MathHelper.toRadians(270 - 20);
-			sprite.rotation = MathHelper.toRadians(-10);
+			if(milk.input.isDown(Key.D))
+			{
+				body.applyAngularImpulse(50 * speed);
+				emitter.rotation = MathHelper.toRadians(270 - 20);
+				sprite.rotation = MathHelper.toRadians(-10);
+			}
 		}
 
 		IN_USE = emitter.visible;

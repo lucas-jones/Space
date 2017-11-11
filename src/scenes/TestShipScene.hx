@@ -182,6 +182,7 @@ class TestShipScene extends Scene
 					followCam.zoom = 0.5;
 					removeNode(player);
 					player = null;
+					ship.setActive(true);
 				}
 			}
 			else
@@ -193,6 +194,7 @@ class TestShipScene extends Scene
 
 				followCam.target = player;
 				followCam.zoom = 1.5;
+				ship.setActive(false);
 			}
 		}
 

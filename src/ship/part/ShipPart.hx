@@ -23,6 +23,7 @@ class ShipPart extends DisplayObject
 	public var type(default, null):String;
 	public var joints(default, null):Map<String, Joint>;
 	public var body(default, null):Body;
+	public var active:Bool = true;
 
 	private var sprite:Sprite;
 
