@@ -39,7 +39,7 @@ class PlanetSky extends DisplayObject
 		};
 	}
 
-    public function new(texture:String)
+    public function new(texture:String, size:Float, height:Float = 950)
     {
         super();
 
@@ -50,8 +50,8 @@ class PlanetSky extends DisplayObject
         for(x in 0 ... 360)
         {
             
-            verts.push(Vector2.RADIAN(milkshake.utils.MathHelper.toRadians(x), 2100));
-            verts.push(Vector2.RADIAN(milkshake.utils.MathHelper.toRadians(x), 1150));
+            verts.push(Vector2.RADIAN(milkshake.utils.MathHelper.toRadians(x), size + height));
+            verts.push(Vector2.RADIAN(milkshake.utils.MathHelper.toRadians(x), size));
 
             uvs.push(Vector2.ONE);
             uvs.push(Vector2.ONE);

@@ -70,7 +70,7 @@ class Planet extends DisplayObject
 	var sky:scenes.planet.PlanetSky;
 	var sun:scenes.planet.PlanetSky;
 
-	var size:Float;
+	public var size(default, null):Float;
 
 	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true, size:Float = 1200)
 	{
@@ -78,17 +78,17 @@ class Planet extends DisplayObject
 
 		this.size = size;
 
-		addNode(sky = new scenes.planet.PlanetSky("assets/images/sky.png"));
-		addNode(sun = new scenes.planet.PlanetSky("assets/images/sky_set3.png"));
+		addNode(sky = new scenes.planet.PlanetSky("assets/images/sky.png", size - 10));
+		addNode(sun = new scenes.planet.PlanetSky("assets/images/sky_set3.png", size - 10));
 
 		for(x in 0 ... 40)
 		{
-			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(snow ? SNOW_TREE_ASSETS : TREE_ASSETS))), Random.float(0, 360)));
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(snow ? SNOW_TREE_ASSETS : TREE_ASSETS))), Random.float(0, 360), size - 5));
 		}
 
 		for(x in 0 ... 20)
 		{
-			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(GRASS_ASSETS))), Random.float(0, 360)), size - 5);
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(GRASS_ASSETS))), Random.float(0, 360), size - 5));
 		}
 
 		addNode(clouds = new DisplayObject());

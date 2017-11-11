@@ -70,8 +70,8 @@ class TestShipScene extends Scene
 
 
 		addPlanet(new Vector2(0, 3000));
-		addPlanet(new Vector2(0, -3000), true);
-		addPlanet(new Vector2(-7000, -300));
+		addPlanet(new Vector2(0, -3000), true, 500);
+		addPlanet(new Vector2(-7000, -300), 3000);
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
@@ -168,7 +168,10 @@ class TestShipScene extends Scene
 	
 		// if(player == null)
 		// {
-			followCam.zoom = (distance > 2000) ? 0.25 : (player == null) ? 0.5 : 1;
+			// Biggest hack of my life
+			var shape:Circle = cast planets[0].shapes.at(0);
+
+			followCam.zoom = (distance > shape.radius + 700) ? 0.25 : (player == null) ? 0.5 : 1;
 			if(input.isDown(Key.M)) followCam.zoom = 0.05;
 		// }
 		
@@ -252,7 +255,10 @@ class TestShipScene extends Scene
 				var distance = Vector2.distance(new Vector2(planet.position.x, planet.position.y), followCam.target.position);
 				if(player != null && body == player.body) player.rotation = force.angle - milkshake.utils.MathHelper.toRadians(90);
 				// We don't use a true description of gravity, as it doesn't 'play' as nice.
-				force.length = 20 * MathHelper.clamp(MathHelper.map(1535, 2000, 1, 0, distance), 0, 1);
+
+				var shape:Circle = cast planet.shapes.at(0);
+
+				force.length = 20 * MathHelper.clamp(MathHelper.map(shape.radius, shape.radius + 700, 1, 0, distance), 0, 1);
 
 				// Impulse to be applied = force * deltaTime
 				body.applyImpulse(
