@@ -63,9 +63,9 @@ class TestShipScene extends Scene
 
 		addNode(sky = milkshake.utils.GraphicsHelper.generateRectangle(100000, 100000, Color.SkyBlue, true));
 
-		addPlanet(new Vector2(0, 3000));
-		addPlanet(new Vector2(0, -3000), true, 500);
-		addPlanet(new Vector2(-7000, -300), 3000);
+		addPlanet(new Vector2(0, 3000), Planet.GRASS_PLANET, 1200, true);
+		addPlanet(new Vector2(0, -3000), Planet.SNOW_PLANET, 500);
+		addPlanet(new Vector2(-7000, -300), Planet.GRASS_PLANET, 3000, true);
 
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
@@ -101,12 +101,10 @@ class TestShipScene extends Scene
 		addNode(orbit = new milkshake.core.Graphics());
 	}
 
-	function addPlanet(position:Vector2, snow:Bool = false, size:Float = 1200)
+	function addPlanet(position:Vector2, type:PlanetType, size:Float = 1200, hasMoon:Bool = false)
 	{
-		var grass = snow ? Texture.fromImage("assets/images/tundra.png") : Texture.fromImage("assets/images/grass.png");
-		var dirt = snow ? Texture.fromImage("assets/images/ice.png") : Texture.fromImage("assets/images/dirt.png");
-
-		addNode(new Planet(grass, dirt, snow, size),
+		var p:Planet;
+		addNode(p = new Planet(type, size, hasMoon),
 		{
 			position: position
 		});
@@ -118,6 +116,7 @@ class TestShipScene extends Scene
 
 		planet.position = new nape.geom.Vec2(position.x, position.y);
 		space.bodies.add(planet);
+		if(hasMoon) space.bodies.add(p.moonBody);
 
 		planets.push(planet);
 
@@ -153,8 +152,6 @@ class TestShipScene extends Scene
 
 			return (aValue > bValue) ? 1 : -1;
 		});
-
-
 
 		var distance = Vector2.distance(planets[0].position.toVector2(), followCam.target.position);
 		sky.alpha = 0;

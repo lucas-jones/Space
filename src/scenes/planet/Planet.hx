@@ -10,8 +10,22 @@ import pixi.core.textures.Texture;
 import scenes.planet.Slice;
 import scenes.polygon.Polygon;
 import scenes.polygon.SmartPolygon;
+import nape.phys.BodyType;
+import nape.phys.Body;
+import nape.shape.Circle;
+import nape.geom.Vec2;
+import nape.space.Space;
 
 import milkshake.utils.Random;
+
+typedef PlanetType =
+{
+	var bushes:Array<String>;
+	var clouds:Array<String>;
+	var trees:Array<String>;
+	var crust:Texture;
+	var core:Texture;
+}
 
 class Planet extends DisplayObject
 {
@@ -52,7 +66,7 @@ class Planet extends DisplayObject
 		"assets/images/backgrounds/cloud9png",
 	];
 
-	public static var GRASS_ASSETS = [
+	public static var BUSH_ASSETS = [
 		"assets/images/backgrounds/grass1.png",
 		"assets/images/backgrounds/grass2.png",
 		"assets/images/backgrounds/grass3.png",
@@ -60,6 +74,24 @@ class Planet extends DisplayObject
 		"assets/images/backgrounds/grass5.png",
 		"assets/images/backgrounds/grass6.png"
 	];
+
+	public static var SNOW_PLANET:PlanetType =
+	{
+		bushes: BUSH_ASSETS,
+		clouds: CLOUD_ASSETS,
+		trees: SNOW_TREE_ASSETS,
+		crust: Texture.fromImage("assets/images/tundra.png"),
+		core: Texture.fromImage("assets/images/ice.png"),
+	}
+
+	public static var GRASS_PLANET:PlanetType =
+	{
+		bushes: BUSH_ASSETS,
+		clouds: CLOUD_ASSETS,
+		trees: TREE_ASSETS,
+		crust: Texture.fromImage("assets/images/grass.png"),
+		core: Texture.fromImage("assets/images/dirt.png"),
+	}
 
 	var crust:Slice;
 	var crustPolygon:Polygon;
@@ -70,9 +102,13 @@ class Planet extends DisplayObject
 	var sky:scenes.planet.PlanetSky;
 	var sun:scenes.planet.PlanetSky;
 
+	public var moon:Moon;
+	var moonContainer:DisplayObject;
+	public var moonBody:Body;
+
 	public var size(default, null):Float;
 
-	public function new(crustTexture:Texture, coreTexture:Texture, snow:Bool = true, size:Float = 1200)
+	public function new(type:PlanetType, size:Float = 1200, hasMoon = false)
 	{
 		super();
 
@@ -83,19 +119,19 @@ class Planet extends DisplayObject
 
 		for(x in 0 ... 40)
 		{
-			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(snow ? SNOW_TREE_ASSETS : TREE_ASSETS))), Random.float(0, 360), size - 5));
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(type.trees))), Random.float(0, 360), size - 5));
 		}
 
 		for(x in 0 ... 20)
 		{
-			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(GRASS_ASSETS))), Random.float(0, 360), size - 5));
+			addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(type.bushes))), Random.float(0, 360), size - 5));
 		}
 
 		addNode(clouds = new DisplayObject());
-		
+
 		for(x in 0 ... 20)
 		{
-			clouds.addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(CLOUD_ASSETS))), Random.float(0, 360), size + 500));
+			clouds.addNode(addDecoration(new Sprite(Texture.fromImage(Random.fromArray(type.clouds))), Random.float(0, 360), size + 500));
 		}
 
 		crust = new Slice(null, 0, 360, size);
@@ -110,10 +146,10 @@ class Planet extends DisplayObject
 		var verts = crust.generatePolygon([]);
 		var uvs = crust.generateUV([]);
 		var indicies = crust.generateIndicies([]);
-		addNode(crustPolygon = new Polygon(crustTexture, verts, uvs, indicies));
+		addNode(crustPolygon = new Polygon(type.crust, verts, uvs, indicies));
 
 		var coreVerts = crust.generateUnderbelly([]);
-		addNode(corePolygon = new SmartPolygon(coreTexture, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(1)));
+		addNode(corePolygon = new SmartPolygon(type.core, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(1)));
 
 		// if(Globals.DEBUG)
 		// {
@@ -129,6 +165,20 @@ class Planet extends DisplayObject
 		// 	graphic.graphics.drawCircle(0, 0, 2500);
 		// 	addNode(graphic);
 		// }
+
+		if(hasMoon)
+		{
+			addNode(moonContainer = new DisplayObject());
+			var moon:Moon;
+			moonContainer.addNode(moon = new Moon(500));
+			moon.position = Vector2.RADIAN(Random.float(0, 360), size + 1500);
+
+			moonBody = new Body(BodyType.KINEMATIC);
+			var shape = new Circle(size);
+			moonBody.shapes.add(shape);
+			moonBody.mass = 1;
+			moonBody.position = new nape.geom.Vec2(moon.position.x, moon.position.y);
+		}
 	}
 
 	function addDecoration(sprite:Sprite, angle:Float, offset:Float = 1196):Sprite
@@ -140,6 +190,7 @@ class Planet extends DisplayObject
 
 		return sprite;
 	}
+
 	var time:Float = 0;
 	override public function update(deltaTime:Float):Void
 	{
@@ -153,5 +204,10 @@ class Planet extends DisplayObject
 		// sun.alpha = 0;//Math.cos(deltaTime) + 0.5;
 
 		clouds.rotation += milkshake.utils.MathHelper.toRadians(0.01);
+
+		if(moon != null)
+		{
+			moon.rotation += milkshake.utils.MathHelper.toRadians(0.01);
+		}
 	}
 }
