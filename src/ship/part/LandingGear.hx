@@ -10,8 +10,10 @@ import milkshake.math.Vector2;
 import ship.part.joint.Joint;
 import nape.shape.Polygon;
 import nape.geom.Vec2;
+import nape.constraint.WeldJoint;
 import milkshake.core.Graphics;
 import milkshake.utils.Color;
+import milkshake.utils.MathHelper;
 
 class LandingGear extends ShipPart
 {
@@ -43,6 +45,8 @@ class LandingGear extends ShipPart
 		}, 100);
 	}
 
+	var weld:WeldJoint;
+
 	override public function update(delta:Float):Void
 	{
 		var rotation = body.rotation - (Math.PI / 2);
@@ -62,19 +66,33 @@ class LandingGear extends ShipPart
 		{
 			if(milk.input.isDownOnce(Key.G))
 			{
-				if(_ray != null)
+				if(weld != null)
+				{
+					body.space.constraints.remove(weld);
+					weld.active = false;
+					weld = null;
+				}
+				else if(_ray != null)
 				{
 					trace("Weld");
-					body.type = body.type == BodyType.STATIC ? BodyType.DYNAMIC : BodyType.STATIC;
+					//body.type = body.type == BodyType.STATIC ? BodyType.DYNAMIC : BodyType.STATIC;
 					// var weld = new WeldJoint(body, _ray.shape.body,
 					// new Vec2(0, 0),
 					// new Vec2(body.position.x + x, body.position.y + y ), 0);
 
-					// weld.stiff = true;
-					// weld.breakUnderForce = true;
-					// weld.removeOnBreak = true;
-					// weld.maxForce = 20000;
-					// body.space.constraints.add(weld);
+					var hit = new Vec2(ray.origin.x, ray.origin.y);
+
+					weld = new WeldJoint(body, _ray.shape.body,
+						new Vec2(0, 0),
+						_ray.shape.body.worldPointToLocal(hit),
+						MathHelper.toRadians(MathHelper.toDegrees(-rotation) - 60) // No idea why this is 60ish off
+					);
+
+					weld.stiff = true;
+					weld.breakUnderForce = true;
+					weld.removeOnBreak = true;
+					weld.maxForce = 200000;
+					body.space.constraints.add(weld);
 				}
 			}
 		}
