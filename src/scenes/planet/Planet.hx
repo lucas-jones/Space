@@ -102,7 +102,7 @@ class Planet extends DisplayObject
 	var sky:scenes.planet.PlanetSky;
 	var sun:scenes.planet.PlanetSky;
 
-	public var moon:Moon;
+	var moon:Moon;
 	var moonContainer:DisplayObject;
 	public var moonBody:Body;
 
@@ -151,33 +151,31 @@ class Planet extends DisplayObject
 		var coreVerts = crust.generateUnderbelly([]);
 		addNode(corePolygon = new SmartPolygon(type.core, coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(1)));
 
-		// if(Globals.DEBUG)
-		// {
-		// 	var graphic = new milkshake.core.Graphics();
-		// 	graphic.graphics.lineStyle(2, Color.Red, 1);
-		// 	graphic.graphics.beginFill(0xFF0000, 0.2);
-		// 	graphic.graphics.drawCircle(0, 0, 1500);
-		// 	addNode(graphic);
+		if(Globals.DEBUG)
+		{
+			var graphic = new milkshake.core.Graphics();
+			graphic.graphics.lineStyle(2, Color.Red, 1);
+			graphic.graphics.beginFill(0xFF0000, 0.2);
+			graphic.graphics.drawCircle(0, 0, 1500);
+			addNode(graphic);
 
-		// 	var graphic = new milkshake.core.Graphics();
-		// 	graphic.graphics.lineStyle(2, 0xffa500, 1);
-		// 	graphic.graphics.beginFill(0xffa500, 0.2);
-		// 	graphic.graphics.drawCircle(0, 0, 2500);
-		// 	addNode(graphic);
-		// }
+			var graphic = new milkshake.core.Graphics();
+			graphic.graphics.lineStyle(2, 0xffa500, 1);
+			graphic.graphics.beginFill(0xffa500, 0.2);
+			graphic.graphics.drawCircle(0, 0, 2500);
+			addNode(graphic);
+		}
 
 		if(hasMoon)
 		{
-			addNode(moonContainer = new DisplayObject());
-			var moon:Moon;
-			moonContainer.addNode(moon = new Moon(500));
+			addNode(moon = new Moon(500));
 			moon.position = Vector2.RADIAN(Random.float(0, 360), size + 1500);
 
 			moonBody = new Body(BodyType.KINEMATIC);
-			var shape = new Circle(size);
+			var shape = new Circle(moon.size);
 			moonBody.shapes.add(shape);
 			moonBody.mass = 1;
-			moonBody.position = new nape.geom.Vec2(moon.position.x, moon.position.y);
+			moonBody.position = new nape.geom.Vec2(position.x + moon.position.x, position.y + moon.position.y);
 		}
 	}
 
@@ -207,7 +205,9 @@ class Planet extends DisplayObject
 
 		if(moon != null)
 		{
-			moon.rotation += milkshake.utils.MathHelper.toRadians(0.01);
+			moon.angle += 0.001;
+			moon.position = Vector2.RADIAN(moon.angle, size + 1500);
+			moonBody.position = new nape.geom.Vec2(position.x + moon.position.x, position.y + moon.position.y);
 		}
 	}
 }

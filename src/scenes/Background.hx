@@ -14,6 +14,6 @@ class Background extends Sprite
 		displayObject.removeChild(sprite);
 
 		displayObject.addChild(sprite = new pixi.extras.TilingSprite(texture, 0xFFFFFF, 0xFFFFFF));
-		this.position = Vector2.EQUAL(-0xFFF000);
+		this.position = Vector2.EQUAL(-0xFFFFFF / 2);
 	}
 }

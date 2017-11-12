@@ -13,6 +13,7 @@ import milkshake.components.phsyics.PhysicsDebug;
 import nape.geom.Vec2;
 import nape.space.Space;
 import scenes.planet.Planet;
+import scenes.planet.Moon;
 import ship.part.Engine;
 import ship.part.Cockpit;
 import ship.part.Gun;
@@ -28,6 +29,8 @@ import milkshake.Milkshake;
 import milkshake.components.input.Key;
 import nape.geom.Geom;
 import milkshake.Milkshake;
+import milkshake.core.DisplayObject;
+import milkshake.utils.Random;
 
 using utils.PhysicsUtils;
 
@@ -116,9 +119,35 @@ class TestShipScene extends Scene
 
 		planet.position = new nape.geom.Vec2(position.x, position.y);
 		space.bodies.add(planet);
-		if(hasMoon) space.bodies.add(p.moonBody);
-
 		planets.push(planet);
+
+		if(hasMoon)
+		{
+			space.bodies.add(p.moonBody);
+			planets.push(p.moonBody);
+		}
+
+		// if(hasMoon)
+		// {
+		// 	var moonContainer:DisplayObject;
+		// 	var moon:Moon;
+
+		// 	addNode(moonContainer = new DisplayObject(),
+		// 	{
+		// 		position: position
+		// 	});
+		// 	moonContainer.addNode(moon = new Moon(500));
+		// 	moon.position = Vector2.RADIAN(Random.float(0, 360), size + 1500);
+
+		// 	var moonBody = new Body(BodyType.KINEMATIC);
+		// 	var shape = new Circle(moon.size);
+		// 	moonBody.shapes.add(shape);
+		// 	moonBody.mass = 1;
+		// 	moonBody.position = new nape.geom.Vec2(moonContainer.position.x + moon.position.x, moonContainer.position.y + moon.position.y);
+
+		// 	space.bodies.add(moonBody);
+		// 	planets.push(moonBody);
+		// }
 
 		return planet;
 	}

@@ -20,8 +20,9 @@ class Moon extends DisplayObject
 	var corePolygon:SmartPolygon;
 
 	public var size(default, null):Float;
+	public var angle:Float;
 
-	public function new(size:Float = 1200)
+	public function new(size:Float = 500)
 	{
 		super();
 
@@ -43,6 +44,8 @@ class Moon extends DisplayObject
 
 		var coreVerts = crust.generateUnderbelly([]);
 		addNode(corePolygon = new SmartPolygon(Texture.fromImage("assets/images/moon.png"), coreVerts, 4, SmartPolygon.QUAD_INDICE(), 1, SmartPolygon.PATTERN_UV(1)));
+
+		angle = Random.float(0, 360);
 
 		// if(Globals.DEBUG)
 		// {
