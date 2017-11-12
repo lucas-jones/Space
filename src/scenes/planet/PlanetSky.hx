@@ -47,9 +47,9 @@ class PlanetSky extends DisplayObject
         var uvs:Array<Vector2> = [];
         var indicies:Array<Int> = [];
 
-        for(x in 0 ... 360)
+        for(x in 0 ... 370)
         {
-            
+
             verts.push(Vector2.RADIAN(milkshake.utils.MathHelper.toRadians(x), size + height));
             verts.push(Vector2.RADIAN(milkshake.utils.MathHelper.toRadians(x), size));
 
@@ -62,9 +62,9 @@ class PlanetSky extends DisplayObject
         var polygon:SmartPolygon = new SmartPolygon(texture, verts, 4, QUAD_INDICE(), 2, PATTERN_UV(10));
         alpha = 0.9;
         addNode(polygon);
-        
+
     }
 
-    
+
 }
 
