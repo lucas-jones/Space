@@ -15,6 +15,8 @@ import nape.phys.Body;
 import nape.shape.Circle;
 import nape.geom.Vec2;
 import nape.space.Space;
+import scenes.particle.ParticlePresets;
+import milkshake.core.ParticleEmitter;
 
 import milkshake.utils.Random;
 
@@ -98,6 +100,7 @@ class Planet extends DisplayObject
 	var corePolygon:SmartPolygon;
 
 	var clouds:DisplayObject;
+	var snow:DisplayObject;
 
 	var sky:scenes.planet.PlanetSky;
 	var sun:scenes.planet.PlanetSky;
@@ -177,6 +180,16 @@ class Planet extends DisplayObject
 			moonBody.mass = 1;
 			moonBody.position = new nape.geom.Vec2(position.x + moon.position.x, position.y + moon.position.y);
 		}
+
+		if(type == SNOW_PLANET)
+		{
+			addNode(snow = new DisplayObject());
+
+			for(x in 0 ... 20)
+			{
+				snow.addNode(addParticles(ParticlePresets.SNOW, 360 / 10 * x, size + 400));
+			}
+		}
 	}
 
 	function addDecoration(sprite:Sprite, angle:Float, offset:Float = 1196):Sprite
@@ -187,6 +200,15 @@ class Planet extends DisplayObject
 		sprite.anchor = new Vector2(0.5, 1);
 
 		return sprite;
+	}
+
+	function addParticles(particles:ParticleEmitter, angle:Float, offset:Float = 1196):ParticleEmitter
+	{
+		particles.position = Vector2.RADIAN(angle, offset);
+		particles.rotation = angle + MathHelper.toRadians(90);
+		particles.pivot = new Vector2(0.5, 1);
+
+		return particles;
 	}
 
 	var time:Float = 0;

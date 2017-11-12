@@ -75,4 +75,85 @@ class ParticlePresets
 			}
 		});
 	}
+
+	public static var SNOW(get, null):ParticleEmitter;
+
+	public static function get_SNOW():ParticleEmitter
+	{
+		return new ParticleEmitter(
+		[
+			Texture.fromImage('assets/images/particles/snow.png')
+		],
+		{
+			"alpha": {
+				"start": 0.73,
+				"end": 0.46
+			},
+			"scale": {
+				"start": 0.15,
+				"end": 0.2,
+				"minimumScaleMultiplier": 0.5
+			},
+			"color": {
+				"start": "#ffffff",
+				"end": "#ffffff"
+			},
+			"speed": {
+				"start": 200,
+				"end": 200,
+				"minimumSpeedMultiplier": 1
+			},
+			"acceleration": {
+				"x": 0,
+				"y": 0
+			},
+			"maxSpeed": 0,
+			"startRotation": {
+				"min": 50,
+				"max": 70
+			},
+			"noRotation": false,
+			"rotationSpeed": {
+				"min": 0,
+				"max": 200
+			},
+			"lifetime": {
+				"min": 4,
+				"max": 4
+			},
+			"blendMode": "normal",
+			"ease": [
+				{
+					"s": 0,
+					"cp": 0.379,
+					"e": 0.548
+				},
+				{
+					"s": 0.548,
+					"cp": 0.717,
+					"e": 0.676
+				},
+				{
+					"s": 0.676,
+					"cp": 0.635,
+					"e": 1
+				}
+			],
+			"frequency": 0.004,
+			"emitterLifetime": -1,
+			"maxParticles": 1000,
+			"pos": {
+				"x": 0,
+				"y": 0
+			},
+			"addAtBack": false,
+			"spawnType": "rect",
+			"spawnRect": {
+				"x": -500,
+				"y": -300,
+				"w": 900,
+				"h": 20
+			}
+		});
+	}
 }
