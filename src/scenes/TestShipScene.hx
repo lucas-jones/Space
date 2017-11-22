@@ -70,6 +70,8 @@ class TestShipScene extends Scene
 		addPlanet(new Vector2(0, -3000), Planet.SNOW_PLANET, 500);
 		addPlanet(new Vector2(-7000, -300), Planet.GRASS_PLANET, 3000, true);
 
+		addAstroid(Vector2.ZERO);
+
 		ship = ShipBuilder.fromDescriptor(Json.parse(CompileTime.readFile("assets/ships/andrews_sick_ship.json")), space);
 
 		addNode(ship,
@@ -102,6 +104,17 @@ class TestShipScene extends Scene
 		}
 
 		addNode(orbit = new milkshake.core.Graphics());
+	}
+	
+	function addAstroid(position:Vector2, size:Float = 100)
+	{
+		var astroid = new scenes.planet.Astroid(size);
+		
+		addNode(astroid, {
+			position: position
+		});
+
+		space.bodies.add(astroid.body);
 	}
 
 	function addPlanet(position:Vector2, type:PlanetType, size:Float = 1200, hasMoon:Bool = false)
@@ -191,7 +204,7 @@ class TestShipScene extends Scene
 			// Biggest hack of my life
 			var shape:Circle = cast planets[0].shapes.at(0);
 
-			followCam.zoom = (distance > shape.radius + 700) ? 0.25 : (player == null) ? 0.5 : 1;
+			followCam.zoom = (distance > shape.radius + 700) ? 0.5 : (player == null) ? 0.5 : 1;
 			if(milk.input.isDown(Key.M)) followCam.zoom = 0.05;
 		// }
 

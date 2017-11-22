@@ -10,6 +10,7 @@ import ship.part.Engine;
 import ship.part.ShipPart;
 import ship.part.LandingGear;
 import ship.part.Wheel;
+import ship.part.Claw;
 
 class PartBuilder
 {
@@ -27,6 +28,8 @@ class PartBuilder
 				return new LandingGear(descriptor.id);
 			case 'wheel':
 				return new Wheel(descriptor.id);
+			case 'claw':
+				return new Claw(descriptor.id);
 			default:
 				throw new Error('${descriptor.type} not found!');
 		}

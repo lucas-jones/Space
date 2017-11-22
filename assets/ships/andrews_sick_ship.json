@@ -15,10 +15,6 @@
 		},
 		{
 			"type":"gun",
-			"id":"aWXcP10Wy0hK1wNtFcgqjQ"
-		},
-		{
-			"type":"gun",
 			"id":"JfxuEf1vpewUlraOKlv6j5"
 		},
 		{
@@ -36,6 +32,10 @@
 		{
 			"type":"landing-gear",
 			"id":"4GT7kafgj14Fkk9rdtC9KL"
+		},
+		{
+			"type":"claw",
+			"id":"gvHDkGBRrV62vMaYRpIr22"
 		}
 	],
 	"connections":[
@@ -44,12 +44,6 @@
 			"newPartJointType":"engine_bottom",
 			"shipPartId":"gvHDkGBRrV62vMaYRpIrPX",
 			"shipJointType":"cockpit_top"
-		},
-		{
-			"newPartId":"aWXcP10Wy0hK1wNtFcgqjQ",
-			"newPartJointType":"gun_top",
-			"shipPartId":"gvHDkGBRrV62vMaYRpIrPX",
-			"shipJointType":"cockpit_bottom"
 		},
 		{
 			"newPartId":"JfxuEf1vpewUlraOKlv6j5",
@@ -80,6 +74,12 @@
 			"newPartJointType":"top",
 			"shipPartId":"i28uNoDwadx1JPhbVa0oS7",
 			"shipJointType":"engine_top"
+		},
+		{
+			"newPartId":"gvHDkGBRrV62vMaYRpIr22",
+			"newPartJointType":"bottom",
+			"shipPartId":"gvHDkGBRrV62vMaYRpIrPX",
+			"shipJointType":"cockpit_bottom"
 		}
 	]
 }
